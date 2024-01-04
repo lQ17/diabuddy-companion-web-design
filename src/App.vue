@@ -1,10 +1,14 @@
-<script setup></script>
+<script setup>
+import { useUserStore } from '@/stores'
+const userStore = useUserStore()
+</script>
 
 <template>
   <div>
     <div class="box"></div>
     Hello Vue
-    <van-button type="primary">主要按钮</van-button>
+    {{ userStore.token }}
+    <van-button type="primary" @click="userStore.setToken('asdfsdafdasfsdf')">test</van-button>
     <router-view></router-view>
   </div>
 </template>

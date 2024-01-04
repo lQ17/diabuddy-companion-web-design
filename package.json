@@ -27,6 +27,7 @@
     "eslint-plugin-vue": "^9.17.0",
     "husky": "^8.0.0",
     "lint-staged": "^15.2.0",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "postcss-px-to-viewport": "^1.1.1",
     "prettier": "^3.0.3",
     "unplugin-vue-components": "^0.26.0",
