@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import FoodPageContainer from '@/views/food/components/FoodPageContainer.vue'
+import FoodPageContainer from '@/views/food/components/FoodPageContainerInFoodPage.vue'
 const activeSidebar = ref(0)
 const activeTabs = ref(0)
 </script>
@@ -37,7 +37,7 @@ const activeTabs = ref(0)
       <!-- 内容显示区域 -->
       <div class="content-display">
         <van-tabs v-model="activeTabs">
-          <!-- 以后改成v-for传入食物子类（food_tiny_category）van-tab标题也为子类 -->
+          <!-- 以后改成v-for 向子元素传入食物类（food_category）、食物子类（food_tiny_category）van-tab标题为子类 -->
           <!-- food-page-container里面有list -->
           <van-tab title="小麦"><food-page-container> </food-page-container></van-tab>
           <van-tab title="标签 2"><food-page-container> </food-page-container></van-tab>

@@ -18,8 +18,14 @@ const onLoad = () => {
     }
   }, 1000)
 }
+// 查完后，装到这个list中
+const food_list_by_category_and_tiny_category = ref([])
 defineProps({
   food_category: {
+    required: true,
+    type: String
+  },
+  food_tiny_category: {
     required: true,
     type: String
   }
@@ -28,14 +34,13 @@ defineProps({
 
 <template>
   <div>
-    <div>{{ food_category }}</div>
     <van-list
       v-model:loading="loading"
       :finished="finished"
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <van-cell v-for="item in list" :key="item" :title="item" />
+      <van-cell v-for="item in food_list_by_category_and_tiny_category" :key="item" :title="item" />
     </van-list>
   </div>
 </template>
