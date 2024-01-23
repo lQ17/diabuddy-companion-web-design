@@ -1,22 +1,22 @@
 <script setup>
-import TDDIcon from '@/assets/TDD-icon.png'
-import ICRIcon from '@/assets/ICR-icon.png'
-import ISFIcon from '@/assets/ISF-icon.png'
-import BasalRateIcon from '@/assets/basal-rate-icon.png'
-import FoodIcon from '@/assets/food-icon.png'
-import DayEatingIcon from '@/assets/day-eating-icon.png'
-import NeedleIcon from '@/assets/needle.png'
+import TDDIcon from '@/assets/icon/TDD-icon.png'
+import ICRIcon from '@/assets/icon/ICR-icon.png'
+import ISFIcon from '@/assets/icon/ISF-icon.png'
+import BasalRateIcon from '@/assets/icon/basal-rate-icon.png'
+import FoodIcon from '@/assets/icon/food-icon.png'
+import DayEatingIcon from '@/assets/icon/day-eating-icon.png'
+import NeedleIcon from '@/assets/icon/needle.png'
 </script>
 <template>
   <div class="page-container">
     <!-- 头像、搜索框、闹钟 -->
     <van-row type="flex" justify="space-between" align="center" class="custom-row">
-      <!-- 图片 -->
+      <!-- 头像 -->
       <van-col class="image-col">
         <van-image
           round
-          width="40"
-          height="40"
+          width="50"
+          height="50"
           fit="cover"
           position="center"
           src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
@@ -220,7 +220,7 @@ import NeedleIcon from '@/assets/needle.png'
         </van-col>
         <van-col span="6"></van-col>
         <van-col span="6"></van-col>
-        <van-col span="6" class="compute-font-col">食物库</van-col>
+        <van-col span="6" class="compute-font-col">食物预设</van-col>
         <van-col span="6" class="compute-font-col">三餐摄入</van-col>
         <van-col span="6"></van-col>
         <van-col span="6"></van-col>
