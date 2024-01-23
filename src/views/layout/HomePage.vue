@@ -249,7 +249,7 @@ import NeedleIcon from '@/assets/icon/needle.png'
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -385,7 +385,7 @@ import NeedleIcon from '@/assets/icon/needle.png'
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   aspect-ratio: 1;
   display: flex;
   justify-content: center;
@@ -394,7 +394,7 @@ import NeedleIcon from '@/assets/icon/needle.png'
 
 .page-container {
   height: 100vh;
-  background: linear-gradient(to bottom, #1989fa 10%, white 30%);
+  background: linear-gradient(to bottom, #1989fa 10%, #f6f7fb 30%);
 }
 
 .custom-row {
