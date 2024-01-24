@@ -21,7 +21,8 @@ const router = createRouter({
     { path: '/food/favorite', component: () => import('@/views/food_favorite/FoodFavorite.vue') },
     { path: '/foodlist', component: () => import('@/views/food/FoodList.vue') },
     // 路由动态传参
-    { path: '/food/:food_id', component: () => import('@/views/food/FoodDetail.vue') }
+    { path: '/food/:food_id', component: () => import('@/views/food/FoodDetail.vue') },
+    { path: '/:pathMatch(.*)*', component: () => import('@/views/err/NotFoundPage.vue') } // 通配符路由
   ]
 })
 
