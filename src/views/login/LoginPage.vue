@@ -14,12 +14,7 @@ const sms = ref('')
 </script>
 <template>
   <div>
-    <van-nav-bar
-      class="nav-bar-class"
-      @click-left="onClickLeft"
-      @click-right="onClickRight"
-      :border="false"
-    >
+    <van-nav-bar class="nav-bar-class" @click-left="onClickLeft" @click-right="onClickRight" :border="false">
       <template #left>
         <div class="nav-bar-left-div">取消</div>
       </template>
@@ -60,30 +55,11 @@ const sms = ref('')
     <div class="login-form">
       <van-form @submit="onSubmit">
         <van-cell-group inset :border="true">
-          <van-field
-            class="bordered-field"
-            v-model="emailOrPhone"
-            name="邮箱或手机号"
-            placeholder="邮箱或手机号"
-          />
+          <van-field class="bordered-field" v-model="emailOrPhone" name="邮箱或手机号" placeholder="邮箱或手机号" />
           <!-- 密码框  与下面互斥 -->
-          <van-field
-            class="bordered-field"
-            v-if="!loginWayChoose"
-            v-model="password"
-            type="password"
-            name="密码"
-            placeholder="密码"
-          />
+          <van-field class="bordered-field" v-if="!loginWayChoose" v-model="password" type="password" name="密码" placeholder="密码" />
           <!-- 验证码框  与上面互斥 -->
-          <van-field
-            class="bordered-field"
-            v-if="loginWayChoose"
-            v-model="sms"
-            center
-            clearable
-            placeholder="请输入短信验证码"
-          >
+          <van-field class="bordered-field" v-if="loginWayChoose" v-model="sms" center clearable placeholder="请输入短信验证码">
             <template #button>
               <van-button size="small" type="primary">发送验证码</van-button>
             </template>

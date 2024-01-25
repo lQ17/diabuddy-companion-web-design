@@ -4,32 +4,17 @@ import Analysis from '@/assets/icon/analysis.png'
 import Stethoscope from '@/assets/icon/stethoscope.png'
 import DocDetail from '@/assets/icon/doc-detail.png'
 import MedicineBottleOne from '@/assets/icon/medicine-bottle-one.png'
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
 </script>
 <template>
   <div class="page-container">
-    <!-- 设置、扫二维码 -->
-    <van-row type="flex" class="head-line-row" gutter="15">
-      <!-- 设置 -->
-      <van-col class="setting head-line-icon">
-        <van-icon name="setting-o" size="25" />
-      </van-col>
-      <!-- 扫描二维码 -->
-      <van-col class="scan head-line-icon">
-        <van-icon name="scan" size="25" />
-      </van-col>
-    </van-row>
     <!-- 用户基础信息 -->
     <div class="user-base-info">
       <!-- 头像 -->
       <div class="avatar">
-        <van-image
-          round
-          width="60"
-          height="60"
-          fit="cover"
-          position="center"
-          src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
-        >
+        <van-image round width="60" height="60" fit="cover" position="center" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
           </template>
@@ -93,6 +78,7 @@ import MedicineBottleOne from '@/assets/icon/medicine-bottle-one.png'
         <van-col span="18"></van-col>
       </van-row>
     </div>
+    <!-- 最后一行黑色的icon -->
     <div class="user-service-box">
       <van-row class="user-service-icon-row" justify="space-around" :gutter="[20, 20]">
         <van-col span="6">
@@ -107,7 +93,13 @@ import MedicineBottleOne from '@/assets/icon/medicine-bottle-one.png'
             <div class="user-service-icon-description">联系客服</div>
           </div>
         </van-col>
-        <van-col span="12"></van-col>
+        <van-col span="6" @click="router.push('/setting')">
+          <div class="user-service-icon-outside-div">
+            <van-icon name="setting-o" class="user-service-icon" size="30" />
+            <div class="user-service-icon-description">用户设置</div>
+          </div>
+        </van-col>
+        <van-col span="6"></van-col>
       </van-row>
     </div>
   </div>
@@ -163,6 +155,7 @@ import MedicineBottleOne from '@/assets/icon/medicine-bottle-one.png'
 }
 .user-base-info {
   margin: 16px;
+  margin-top: 0px;
   padding: 16px;
   display: flex;
   align-items: center;
@@ -171,6 +164,7 @@ import MedicineBottleOne from '@/assets/icon/medicine-bottle-one.png'
   padding: 8px;
 }
 .page-container {
+  padding-top: 30px;
   height: 100vh;
   background: #f6f7fb;
 }

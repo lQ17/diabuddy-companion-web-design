@@ -9,6 +9,7 @@ const registerWayChooseList = ref(['邮箱注册', '手机号注册'])
 const email = ref('')
 const phone = ref('')
 const password = ref('')
+const repassword = ref('')
 //手机号验证码
 const sms = ref('')
 //邮箱验证码
@@ -16,12 +17,7 @@ const emailMsg = ref('')
 </script>
 <template>
   <div>
-    <van-nav-bar
-      class="nav-bar-class"
-      @click-left="onClickLeft"
-      @click-right="onClickRight"
-      :border="false"
-    >
+    <van-nav-bar class="nav-bar-class" @click-left="onClickLeft" @click-right="onClickRight" :border="false">
       <template #left>
         <div class="nav-bar-left-div">取消</div>
       </template>
@@ -60,51 +56,20 @@ const emailMsg = ref('')
       <van-form @submit="onSubmit">
         <van-cell-group inset :border="true">
           <!-- 邮箱 与下面互斥 -->
-          <van-field
-            v-if="!registerWayChoose"
-            class="bordered-field"
-            v-model="email"
-            name="请输入邮箱"
-            placeholder="请输入邮箱"
-          />
+          <van-field v-if="!registerWayChoose" class="bordered-field" v-model="email" name="请输入邮箱" placeholder="请输入邮箱" />
           <!-- 手机号 与上面互斥 -->
-          <van-field
-            v-if="registerWayChoose"
-            class="bordered-field"
-            v-model="phone"
-            name="请输入手机号"
-            placeholder="请输入手机号"
-          />
+          <van-field v-if="registerWayChoose" class="bordered-field" v-model="phone" name="请输入手机号" placeholder="请输入手机号" />
 
-          <van-field
-            class="bordered-field"
-            v-model="password"
-            type="password"
-            name="请输入密码"
-            placeholder="请输入密码"
-          />
+          <van-field class="bordered-field" v-model="password" type="password" name="请输入密码" placeholder="请输入密码" />
+          <van-field class="bordered-field" v-model="repassword" type="password" name="请再次输入密码" placeholder="请再次输入密码" />
           <!-- 邮箱验证码框 与下面互斥 -->
-          <van-field
-            class="bordered-field"
-            v-if="!registerWayChoose"
-            v-model="emailMsg"
-            center
-            clearable
-            placeholder="请输入邮箱验证码"
-          >
+          <van-field class="bordered-field" v-if="!registerWayChoose" v-model="emailMsg" center clearable placeholder="请输入邮箱验证码">
             <template #button>
               <van-button size="small" type="primary" @click="getEmailCode">发送验证码</van-button>
             </template>
           </van-field>
           <!-- 手机号验证码框 与上面互斥 -->
-          <van-field
-            class="bordered-field"
-            v-if="registerWayChoose"
-            v-model="sms"
-            center
-            clearable
-            placeholder="请输入短信验证码"
-          >
+          <van-field class="bordered-field" v-if="registerWayChoose" v-model="sms" center clearable placeholder="请输入短信验证码">
             <template #button>
               <van-button size="small" type="primary" @click="getSmsCode">发送验证码</van-button>
             </template>

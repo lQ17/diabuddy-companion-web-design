@@ -14,14 +14,7 @@ import AlarmIcon from '@/assets/icon/alarm.svg'
     <van-row type="flex" justify="space-between" class="custom-row">
       <!-- 头像 -->
       <van-col class="image-col">
-        <van-image
-          round
-          width="50"
-          height="50"
-          fit="cover"
-          position="center"
-          src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
-        >
+        <van-image round width="50" height="50" fit="cover" position="center" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
           </template>
@@ -46,14 +39,7 @@ import AlarmIcon from '@/assets/icon/alarm.svg'
     <van-row type="flex" justify="space-around" class="placeholder-row">
       <van-col class="placeholder-div">
         <div class="icon-placeholder">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="currentColor"
-            class="bi bi-calculator row-2-icon"
-            viewBox="0 0 16 16"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-calculator row-2-icon" viewBox="0 0 16 16">
             <path
               d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"
             />
@@ -113,14 +99,7 @@ import AlarmIcon from '@/assets/icon/alarm.svg'
           <!-- 5 -->
           <van-col class="main-row-1-div main-row-2-div add-records-bottom col-5">
             <van-button type="default" round>
-              <van-swipe
-                vertical
-                class="notice-swipe"
-                :autoplay="2000"
-                :touchable="false"
-                :show-indicators="false"
-                hairline
-              >
+              <van-swipe vertical class="notice-swipe" :autoplay="2000" :touchable="false" :show-indicators="false" hairline>
                 <van-swipe-item class="col-5">记行为</van-swipe-item>
                 <van-swipe-item class="col-5">记血糖</van-swipe-item>
                 <van-swipe-item class="col-5">记饮食</van-swipe-item>

@@ -7,27 +7,27 @@ const activeTabs = ref(0)
 <template>
   <div class="page-container">
     <van-nav-bar title="食物库" fixed placeholder />
+    <van-search placeholder="请输入搜索关键词" />
     <div class="sidebar-content-container">
       <div>
         <van-sidebar v-model="activeSidebar" class="food-sidebar">
-          <van-sidebar-item title="谷类" />
-          <van-sidebar-item title="薯类、淀粉" />
-          <van-sidebar-item title="干豆类" />
+          <!-- 谷类、薯类、淀粉 -->
+          <van-sidebar-item title="谷薯类" />
+          <van-sidebar-item title="豆类" />
           <van-sidebar-item title="蔬菜类" />
           <van-sidebar-item title="菌藻类" />
           <van-sidebar-item title="水果类" />
-          <van-sidebar-item title="坚果、种子类" />
-          <van-sidebar-item title="畜肉类" />
-          <van-sidebar-item title="禽肉类" />
-          <van-sidebar-item title="乳类" />
-          <van-sidebar-item title="蛋类" />
+          <van-sidebar-item title="坚果类" />
+          <!-- 禽类、畜类 -->
+          <van-sidebar-item title="禽畜肉类" />
+          <!-- 蛋类、奶类 -->
+          <van-sidebar-item title="蛋奶类" />
           <van-sidebar-item title="鱼虾蟹贝类" />
           <van-sidebar-item title="婴幼儿食品" />
-          <van-sidebar-item title="小吃、甜饼" />
+          <van-sidebar-item title="小吃糕点" />
           <van-sidebar-item title="速食食品" />
-          <van-sidebar-item title="饮料类" />
-          <van-sidebar-item title="含酒精饮料" />
-          <van-sidebar-item title="糖、果脯和蜜饯、蜂蜜" />
+          <van-sidebar-item title="饮料、酒类" />
+          <van-sidebar-item title="糖果类" />
           <van-sidebar-item title="油脂类" />
           <van-sidebar-item title="调味品类" />
           <van-sidebar-item title="其它" />
