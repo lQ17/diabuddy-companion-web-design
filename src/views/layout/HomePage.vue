@@ -7,13 +7,15 @@ import FoodIcon from '@/assets/icon/food-icon.png'
 import DayEatingIcon from '@/assets/icon/day-eating-icon.png'
 import NeedleIcon from '@/assets/icon/needle.png'
 import AlarmIcon from '@/assets/icon/alarm.svg'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 </script>
 <template>
   <div class="page-container">
     <!-- 头像、搜索框、闹钟 -->
     <van-row type="flex" justify="space-between" class="custom-row">
       <!-- 头像 -->
-      <van-col class="image-col">
+      <van-col class="image-col" @click="router.push('/user')">
         <van-image round width="50" height="50" fit="cover" position="center" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
@@ -24,20 +26,20 @@ import AlarmIcon from '@/assets/icon/alarm.svg'
 
       <!-- 搜索 -->
       <!-- click-input 点击输入区域时触发 event: MouseEvent -->
-      <van-col class="search-col">
+      <van-col class="search-col" @click="router.push('/foodsearch')">
         <van-search placeholder="请输入搜索关键词" shape="round" background="#1989fa" />
       </van-col>
 
       <!-- 闹钟 -->
-      <van-col class="icon-col">
-        <!-- <van-icon name="src\assets\alarm.svg" size="30" color="#fff" /> -->
+      <!-- 以后用后端实现，并推送通知 -->
+      <van-col class="icon-col" @click="router.push('/ud')">
         <van-image width="30" height="30" :src="AlarmIcon" />
       </van-col>
     </van-row>
 
     <!-- 头像、搜索框下的一排功能 -->
     <van-row type="flex" justify="space-around" class="placeholder-row">
-      <van-col class="placeholder-div">
+      <van-col class="placeholder-div van-haptics-feedback" @click="router.push('/utils/carb-fast-calculation')">
         <div class="icon-placeholder">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-calculator row-2-icon" viewBox="0 0 16 16">
             <path
@@ -50,19 +52,19 @@ import AlarmIcon from '@/assets/icon/alarm.svg'
         </div>
         <span>碳水快算</span>
       </van-col>
-      <van-col class="placeholder-div">
+      <van-col class="placeholder-div van-haptics-feedback" @click="router.push('/utils/insulin-adjustment')">
         <div class="icon-placeholder">
           <img :src="NeedleIcon" alt="needle" width="30px" height="30px" />
         </div>
         <span>纠正量</span>
       </van-col>
-      <van-col class="placeholder-div">
+      <van-col class="placeholder-div van-haptics-feedback" @click="router.push('/cantd')">
         <div class="icon-placeholder">
           <van-icon name="link-o" class="row-2-icon" />
         </div>
         <span>绑定动态</span>
       </van-col>
-      <van-col class="placeholder-div">
+      <van-col class="placeholder-div van-haptics-feedback">
         <div class="icon-placeholder">
           <van-icon name="friends-o" class="row-2-icon" />
         </div>
@@ -161,27 +163,27 @@ import AlarmIcon from '@/assets/icon/alarm.svg'
     <!-- 底部盒子 -->
     <div class="foot-box">
       <van-row :gutter="[15, 10]" justify="center">
-        <van-col span="6" class="compute-icon-col">
-          <img :src="TDDIcon" alt="TDD" class="all-compute-icon" />
+        <van-col span="6" class="compute-icon-col" @click="router.push('/utils/TDD-calculation')">
+          <img :src="TDDIcon" alt="TDD" class="all-compute-icon van-haptics-feedback" />
         </van-col>
-        <van-col span="6" class="compute-icon-col">
-          <img :src="ICRIcon" alt="ICR" class="all-compute-icon" />
+        <van-col span="6" class="compute-icon-col" @click="router.push('/utils/ICR-calculation')">
+          <img :src="ICRIcon" alt="ICR" class="all-compute-icon van-haptics-feedback" />
         </van-col>
-        <van-col span="6" class="compute-icon-col">
-          <img :src="ISFIcon" alt="ISF" class="all-compute-icon" />
+        <van-col span="6" class="compute-icon-col" @click="router.push('/utils/ISF-calculation')">
+          <img :src="ISFIcon" alt="ISF" class="all-compute-icon van-haptics-feedback" />
         </van-col>
-        <van-col span="6" class="compute-icon-col">
-          <img :src="BasalRateIcon" alt="BasalRate" class="all-compute-icon" />
+        <van-col span="6" class="compute-icon-col" @click="router.push('/utils/insulin-pump-basal-rate')">
+          <img :src="BasalRateIcon" alt="BasalRate" class="all-compute-icon van-haptics-feedback" />
         </van-col>
         <van-col span="6" class="compute-font-col">TDD计算</van-col>
         <van-col span="6" class="compute-font-col">ICR计算</van-col>
         <van-col span="6" class="compute-font-col">ISF计算</van-col>
         <van-col span="6" class="compute-font-col">基础率段</van-col>
-        <van-col span="6" class="compute-icon-col">
-          <img :src="FoodIcon" alt="Food" class="all-compute-icon" />
+        <van-col span="6" class="compute-icon-col" @click="router.push('/utils/user-upload-food')">
+          <img :src="FoodIcon" alt="Food" class="all-compute-icon van-haptics-feedback" />
         </van-col>
-        <van-col span="6" class="compute-icon-col">
-          <img :src="DayEatingIcon" alt="DayEating" class="all-compute-icon" />
+        <van-col span="6" class="compute-icon-col" @click="router.push('/utils/day-eating')">
+          <img :src="DayEatingIcon" alt="DayEating" class="all-compute-icon van-haptics-feedback" />
         </van-col>
         <van-col span="6"></van-col>
         <van-col span="6"></van-col>

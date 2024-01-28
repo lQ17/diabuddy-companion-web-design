@@ -3,9 +3,9 @@ const onClickLeft = () => history.back()
 </script>
 
 <template>
-  <!-- 看亲友 -->
+  <!-- 绑定动态 -->
   <div class="page-container">
-    <van-nav-bar title="看亲友" left-text="返回" left-arrow @click-left="onClickLeft" placeholder />
+    <van-nav-bar title="绑定动态" left-text="返回" left-arrow @click-left="onClickLeft" placeholder />
   </div>
 </template>
 
