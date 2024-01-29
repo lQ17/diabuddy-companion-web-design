@@ -31,6 +31,22 @@ const selectedFoodWeight = ref()
     <van-nav-bar title="碳水快算" left-text="返回" left-arrow @click-left="onClickLeft" />
     <div class="added-list">
       <van-cell-group inset class="show-added-food" @click="selectManual = true">
+        <van-swipe-cell>
+          <template #right>
+            <span class="custom-title">苹果</span>
+          </template>
+          <template #label>
+            <span class="custom-title">12克/100克 </span>
+            <van-tag type="primary">100克</van-tag>
+          </template>
+          <template #value>
+            <span class="custom-title">碳水量:</span>
+            <van-tag type="primary" size="large" plain>16 克</van-tag>
+          </template>
+        </van-swipe-cell>
+      </van-cell-group>
+
+      <van-cell-group inset class="show-added-food" @click="selectManual = true">
         <van-cell center>
           <template #title>
             <span class="custom-title">苹果</span>

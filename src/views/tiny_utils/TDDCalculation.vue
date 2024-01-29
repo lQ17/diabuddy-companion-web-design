@@ -7,6 +7,9 @@ const weight = ref()
 const showHowToCompute = ref(false)
 const onClickLeft = () => history.back()
 const TDDResult = computed(() => {
+  if (totalDay.value === null || totalUsage.value === null || age.value === null || weight.value === null) {
+    return 0
+  }
   if (age.value >= 18) {
     return ((totalUsage.value / totalDay.value + 0.53 * weight.value) * 0.45).toFixed(2)
   }
@@ -82,9 +85,10 @@ const TDDResult = computed(() => {
     <div class="warning-box">
       <div class="warning-font-box">
         <p>注意：</p>
-        <p>
-          每日胰岛素总量(TDD)仅相对稳定，随饮食、运动、应激与否、天气、心情、你的DeadLine、地日实施距离的变化(×)，均会产生波动。并且随着体重的增加或进入青春期，胰岛素总量都会上升
-        </p>
+        <p>&nbsp;</p>
+        <p>每日胰岛素总量(TDD)仅相对稳定，随饮食、运动、应激与否、天气、心情、你的DeadLine、地日实施距离的变化(×)，均会产生波动。</p>
+        <p>&nbsp;</p>
+        <p>并且随着体重的增加或进入青春期，胰岛素总量都会上升</p>
       </div>
     </div>
   </div>
