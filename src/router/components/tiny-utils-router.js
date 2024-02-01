@@ -16,6 +16,10 @@ export default [
     component: () => import('@/views/tiny_utils/UserUploadFood.vue')
   },
   {
+    path: '/utils/user-upload-food-detail',
+    component: () => import('@/views/tiny_utils/UserMoreUploadFoodDetail.vue')
+  },
+  {
     path: '/utils/day-eating',
     component: () => import('@/views/tiny_utils/DayEating.vue')
   },
