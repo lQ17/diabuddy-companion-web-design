@@ -29,7 +29,7 @@ const comfirmUpload = () => {
     <van-nav-bar title="食物预设" left-text="返回" left-arrow @click-left="onClickLeft" />
     <div class="warning-box">
       <div class="warning-font-box">
-        你可以在这里上传包装食物、自制的食物。也可以选择仅自己可见，或所有人可见。如上传所有人可见的公共食物，则需要经过审核。
+        你可以在这里上传包装食物、自制的食物。也可以选择仅自己可见，或所有人可见。上传所有人可见的公共食物，需要经过审核。
       </div>
     </div>
     <h3>基本信息</h3>

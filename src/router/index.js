@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import settingRouter from '@/router/components/setting-router.js'
 import tinyUtilsRouter from '@/router/components/tiny-utils-router.js'
+import foodRouter from './components/food-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -23,11 +24,7 @@ const router = createRouter({
     { path: '/register', component: () => import('@/views/register/RegisterPage.vue') },
     { path: '/record', component: () => import('@/views/record/RecordPage.vue') },
     { path: '/share', component: () => import('@/views/share/SharePage.vue') },
-    { path: '/food/favorite', component: () => import('@/views/food_favorite/FoodFavorite.vue') },
-    { path: '/foodlist', component: () => import('@/views/food/FoodList.vue') },
-    { path: '/foodsearch', component: () => import('@/views/food/FoodSearch.vue') },
-    // 路由动态传参
-    { path: '/food/:food_id', component: () => import('@/views/food/FoodDetail.vue') },
+    ...foodRouter,
     // 设置页面
     ...settingRouter,
     // 首页小工具页面

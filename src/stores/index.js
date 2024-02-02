@@ -9,4 +9,5 @@ export default pinia
 // 接收相应模块的按需导出
 
 export * from './modules/uploadFood'
+export * from './modules/searchHistory'
 // export * from './modules/user'

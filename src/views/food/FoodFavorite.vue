@@ -1,18 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import FoodListItem from './components/FoodListItem.vue'
 const defaultFoodImg = 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'
-const route = useRoute()
 const router = useRouter()
 const onClickLeft = () => history.back()
-// 地址栏拿到的参数
-const searchValue = ref('')
-searchValue.value = route.query.search || ''
 
-const onClick = () => {
-  router.replace('/foodsearch')
-}
 // 列表
 const foodList = ref([
   { foodId: 1, foodName: '苹果', cal: 53, carb: 13.7, img: defaultFoodImg },
@@ -41,8 +34,7 @@ const onLoad = () => {
 </script>
 <template>
   <div class="page-container">
-    <van-nav-bar title="食物列表" left-text="返回" left-arrow @click-left="onClickLeft" placeholder />
-    <van-search v-model="searchValue" @click="onClick" />
+    <van-nav-bar title="收藏的食物" left-text="返回" left-arrow @click-left="onClickLeft" placeholder />
     <van-list v-model:loading="foodListLoading" :finished="foodListFinished" finished-text="没有更多了" @load="onLoad">
       <food-list-item
         v-for="food in foodList"

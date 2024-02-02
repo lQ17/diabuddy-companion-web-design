@@ -182,14 +182,16 @@ const router = useRouter()
         <van-col span="6" class="compute-icon-col" @click="router.push('/utils/user-upload-food')">
           <img :src="FoodIcon" alt="Food" class="all-compute-icon van-haptics-feedback" />
         </van-col>
+        <van-col span="6" class="compute-icon-col" @click="router.push('/food-favorite')">
+          <van-icon name="star" size="50" color="#ff976a" />
+        </van-col>
         <van-col span="6" class="compute-icon-col" @click="router.push('/utils/day-eating')">
           <img :src="DayEatingIcon" alt="DayEating" class="all-compute-icon van-haptics-feedback" />
         </van-col>
         <van-col span="6"></van-col>
-        <van-col span="6"></van-col>
-        <van-col span="6" class="compute-font-col">食物预设</van-col>
+        <van-col span="6" class="compute-font-col">上传食物</van-col>
+        <van-col span="6" class="compute-font-col">收藏食物</van-col>
         <van-col span="6" class="compute-font-col">三餐摄入</van-col>
-        <van-col span="6"></van-col>
         <van-col span="6"></van-col>
       </van-row>
     </div>
