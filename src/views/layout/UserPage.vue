@@ -1,9 +1,12 @@
 <script setup>
-import WritingFluently from '@/assets/icon/writing-fluently.png'
-import Analysis from '@/assets/icon/analysis.png'
-import Stethoscope from '@/assets/icon/stethoscope.png'
-import DocDetail from '@/assets/icon/doc-detail.png'
-import MedicineBottleOne from '@/assets/icon/medicine-bottle-one.png'
+//
+import {
+  WritingFluently as IconWritingFluently,
+  MarketAnalysis as IconMarketAnalysis,
+  Stethoscope as IconStethoscope,
+  MedicalFiles as IconMedicalFiles,
+  MedicineBottleOne as IconMedicineBottleOne
+} from '@icon-park/vue-next'
 
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -37,7 +40,7 @@ const router = useRouter()
         <!-- 再说吧，我也不知道该写啥 -->
         <van-col span="6">
           <div class="health-management-icon-outside-div">
-            <van-icon :name="WritingFluently" class="health-management-icon" size="30"></van-icon>
+            <icon-writing-fluently theme="outline" size="30" fill="#4b5cc4" strokeLinecap="square" />
             <div class="health-management-icon-description">控糖方案</div>
           </div>
         </van-col>
@@ -45,7 +48,7 @@ const router = useRouter()
         <!-- 分析数据 | 折线图之类的 -->
         <van-col span="6">
           <div class="health-management-icon-outside-div">
-            <van-icon :name="Analysis" class="health-management-icon" size="30"></van-icon>
+            <icon-market-analysis theme="outline" size="30" fill="#4b5cc4" strokeLinecap="square" />
             <div class="health-management-icon-description">周报|月报</div>
           </div>
         </van-col>
@@ -53,7 +56,7 @@ const router = useRouter()
         <!-- 化验单管理 -->
         <van-col span="6">
           <div class="health-management-icon-outside-div">
-            <van-icon :name="Stethoscope" class="health-management-icon" size="30"></van-icon>
+            <icon-stethoscope theme="outline" size="30" fill="#4b5cc4" strokeLinecap="square" />
             <div class="health-management-icon-description">病例管理</div>
           </div>
         </van-col>
@@ -61,7 +64,7 @@ const router = useRouter()
         <!-- 患者 or 家属 | 基础信息填写 -->
         <van-col span="6">
           <div class="health-management-icon-outside-div">
-            <van-icon :name="DocDetail" class="health-management-icon" size="30"></van-icon>
+            <icon-medical-files theme="outline" size="30" fill="#4b5cc4" strokeLinecap="square" />
             <div class="health-management-icon-description">健康档案</div>
           </div>
         </van-col>
@@ -69,7 +72,7 @@ const router = useRouter()
         <!-- 用药管理 -->
         <van-col span="6">
           <div class="health-management-icon-outside-div">
-            <van-icon :name="MedicineBottleOne" class="health-management-icon" size="30"></van-icon>
+            <icon-medicine-bottle-one theme="outline" size="30" fill="#4b5cc4" strokeLinecap="square" />
             <div class="health-management-icon-description">用药管理</div>
           </div>
         </van-col>

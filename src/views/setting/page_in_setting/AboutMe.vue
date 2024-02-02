@@ -1,5 +1,5 @@
 <script setup>
-import WikingFaceIcon from '@/assets/icon/winking-face.svg'
+import { WinkingFace } from '@icon-park/vue-next'
 const onClickLeft = () => history.back()
 </script>
 <template>
@@ -11,7 +11,7 @@ const onClickLeft = () => history.back()
         <van-col span="8"></van-col>
         <van-col span="8">
           <div class="diabuddy-icon">
-            <van-image width="80" height="80" :src="WikingFaceIcon" />
+            <winking-face theme="outline" size="80" fill="#1989fa" strokeLinecap="square" />
           </div>
         </van-col>
         <van-col span="8"></van-col>

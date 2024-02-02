@@ -3,6 +3,8 @@ import pinia from '@/stores/index'
 import App from './App.vue'
 import router from './router'
 import '@/styles/common.css'
+//icon-park
+import '@icon-park/vue-next/styles/index.css'
 
 const app = createApp(App)
 

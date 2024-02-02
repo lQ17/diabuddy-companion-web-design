@@ -13,6 +13,7 @@
     "lint-staged": "lint-staged"
   },
   "dependencies": {
+    "@icon-park/vue-next": "^1.4.2",
     "axios": "^1.6.4",
     "chart.js": "^4.4.1",
     "chartjs-plugin-datalabels": "^2.2.0",

@@ -3,12 +3,19 @@ import TDDIcon from '@/assets/icon/TDD-icon.png'
 import ICRIcon from '@/assets/icon/ICR-icon.png'
 import ISFIcon from '@/assets/icon/ISF-icon.png'
 import BasalRateIcon from '@/assets/icon/basal-rate-icon.png'
-import FoodIcon from '@/assets/icon/food-icon.png'
-import DayEatingIcon from '@/assets/icon/day-eating-icon.png'
-import NeedleIcon from '@/assets/icon/needle.png'
-import AlarmIcon from '@/assets/icon/alarm.svg'
+import {
+  Rice as IconRice,
+  KnifeFork as IconKnifeFork,
+  Needle as IconNeedle,
+  CalculatorOne as IconCalculatorOne,
+  AlarmClock as IconAlarmClock
+} from '@icon-park/vue-next'
+
 import { useRouter } from 'vue-router'
 const router = useRouter()
+const toRecordSth = () => {
+  router.push('/record')
+}
 </script>
 <template>
   <div class="page-container">
@@ -33,7 +40,7 @@ const router = useRouter()
       <!-- 闹钟 -->
       <!-- 以后用后端实现，并推送通知 -->
       <van-col class="icon-col" @click="router.push('/ud')">
-        <van-image width="30" height="30" :src="AlarmIcon" />
+        <icon-alarm-clock theme="outline" size="30" fill="#fff" strokeLinecap="square" />
       </van-col>
     </van-row>
 
@@ -41,20 +48,13 @@ const router = useRouter()
     <van-row type="flex" justify="space-around" class="placeholder-row">
       <van-col class="placeholder-div van-haptics-feedback" @click="router.push('/utils/carb-fast-calculation')">
         <div class="icon-placeholder">
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-calculator row-2-icon" viewBox="0 0 16 16">
-            <path
-              d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"
-            />
-            <path
-              d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-2zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-4z"
-            />
-          </svg>
+          <icon-calculator-one theme="outline" size="30" fill="#fff" strokeLinecap="square" />
         </div>
         <span>碳水快算</span>
       </van-col>
       <van-col class="placeholder-div van-haptics-feedback" @click="router.push('/utils/insulin-adjustment')">
         <div class="icon-placeholder">
-          <img :src="NeedleIcon" alt="needle" width="30px" height="30px" />
+          <icon-needle theme="outline" size="30" fill="#fff" strokeLinecap="square" />
         </div>
         <span>纠正量</span>
       </van-col>
@@ -84,7 +84,7 @@ const router = useRouter()
           </van-col>
           <!-- 2. 记行为 -->
           <van-col class="main-row-1-div add-records col-2">
-            <van-button round type="primary" color="#00cfff" class="add-records-button">
+            <van-button round type="primary" color="#00cfff" class="add-records-button" @click="toRecordSth">
               <van-icon name="plus" class="custom-icon center-icon" />
             </van-button>
           </van-col>
@@ -100,7 +100,7 @@ const router = useRouter()
           </van-col>
           <!-- 5 -->
           <van-col class="main-row-1-div main-row-2-div add-records-bottom col-5">
-            <van-button type="default" round>
+            <van-button type="default" round @click="toRecordSth">
               <van-swipe vertical class="notice-swipe" :autoplay="2000" :touchable="false" :show-indicators="false" hairline>
                 <van-swipe-item class="col-5">记行为</van-swipe-item>
                 <van-swipe-item class="col-5">记血糖</van-swipe-item>
@@ -180,13 +180,13 @@ const router = useRouter()
         <van-col span="6" class="compute-font-col">ISF计算</van-col>
         <van-col span="6" class="compute-font-col">基础率段</van-col>
         <van-col span="6" class="compute-icon-col" @click="router.push('/utils/user-upload-food')">
-          <img :src="FoodIcon" alt="Food" class="all-compute-icon van-haptics-feedback" />
+          <icon-rice theme="filled" size="50" fill="#ff3300" strokeLinecap="square" />
         </van-col>
         <van-col span="6" class="compute-icon-col" @click="router.push('/food-favorite')">
           <van-icon name="star" size="50" color="#ff976a" />
         </van-col>
         <van-col span="6" class="compute-icon-col" @click="router.push('/utils/day-eating')">
-          <img :src="DayEatingIcon" alt="DayEating" class="all-compute-icon van-haptics-feedback" />
+          <icon-knife-fork theme="filled" size="48" fill="#ff7500" strokeLinecap="square" />
         </van-col>
         <van-col span="6"></van-col>
         <van-col span="6" class="compute-font-col">上传食物</van-col>
