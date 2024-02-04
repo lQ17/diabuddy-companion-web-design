@@ -1,7 +1,7 @@
 <script setup>
 import { AllApplication, Fork, Time as IconTime, Needle, SpeedOne, HourglassFull as IconHourglassFull } from '@icon-park/vue-next'
 import { ref, onMounted, computed } from 'vue'
-import selectInjectionActions from './InjectionActions'
+import selectInjectionActions from '@/components/InjectionActions'
 // 表单数据
 // 胰岛素类型
 const injetcionType = ref({ text: '' })

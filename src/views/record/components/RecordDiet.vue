@@ -132,7 +132,6 @@ onMounted(() => {
     <van-popup v-model:show="showChangeRecordDate" position="bottom" round :style="{ height: '30%' }">
       <van-date-picker v-model="currentDate" title="选择日期" @confirm="(showChangeRecordDate = false), (showChangeRecordTime = true)" />
     </van-popup>
-    <div id="tip-box" v-if="showtips">*双波可理解为：大剂量+方波</div>
     <div class="btn-submit"><van-button type="primary" block round plain>提交</van-button></div>
     <div class="btn-submit"><van-button type="success" block round plain>提交并记录下一条</van-button></div>
   </div>

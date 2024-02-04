@@ -3,6 +3,7 @@ import settingRouter from '@/router/components/setting-router.js'
 import tinyUtilsRouter from '@/router/components/tiny-utils-router.js'
 import foodRouter from './components/food-router'
 import recordRouter from './components/record-router'
+import setDiaInfo from './components/set-dia-info'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -17,6 +18,7 @@ const router = createRouter({
         { path: '/user', component: () => import('@/views/layout/UserPage.vue') }
       ]
     },
+
     { path: '/register', component: () => import('@/views/register/RegisterPage.vue') },
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') },
     // 尚未开发
@@ -24,6 +26,7 @@ const router = createRouter({
     // 无法开发
     { path: '/cantd', component: () => import('@/views/err/CantDevelopePage.vue') },
     { path: '/share', component: () => import('@/views/share/SharePage.vue') },
+    ...setDiaInfo,
     ...recordRouter,
     ...foodRouter,
     // 设置页面

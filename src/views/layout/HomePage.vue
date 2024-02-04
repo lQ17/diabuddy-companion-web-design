@@ -16,6 +16,9 @@ const router = useRouter()
 const toRecordSth = () => {
   router.push('/record')
 }
+const toSetDiaInfo = () => {
+  router.push('/set-dia-info')
+}
 </script>
 <template>
   <div class="page-container">
@@ -78,7 +81,7 @@ const toRecordSth = () => {
         <van-row class="main-action-row-1">
           <!-- 1. 更新用户信息 -->
           <van-col class="main-row-1-div update-userInfo-quick col-1">
-            <van-button round type="primary" color="#00cfff" class="update-userInfo-quick-button">
+            <van-button round type="primary" color="#00cfff" class="update-userInfo-quick-button" @click="toSetDiaInfo">
               <van-icon name="edit" class="left-icon" />
             </van-button>
           </van-col>
@@ -96,7 +99,7 @@ const toRecordSth = () => {
           </van-col>
           <!-- 4 -->
           <van-col class="main-row-1-div main-row-2-div update-userInfo-quick-button-bottom col-4">
-            <van-button size="small" type="default" round hairline class="col-4">改信息</van-button>
+            <van-button size="small" type="default" round hairline class="col-4" @click="toSetDiaInfo">改信息</van-button>
           </van-col>
           <!-- 5 -->
           <van-col class="main-row-1-div main-row-2-div add-records-bottom col-5">

@@ -61,7 +61,7 @@ onMounted(() => {
     </div>
     <div class="cell-group">
       <van-cell-group inset>
-        <van-field v-model="medicationDosage" type="text" label="剂量" input-align="right">
+        <van-field v-model="medicationDosage" type="number" label="剂量" input-align="right">
           <template #left-icon><ruler theme="outline" size="20" fill="#1989fa" strokeLinecap="square" /></template>
           <template #right-icon> mg </template>
         </van-field>
