@@ -1,6 +1,10 @@
 <script setup>
 import vantComponents from '@/components/vantComponents'
 import RecordBloodSugar from './components/RecordBloodSugar.vue'
+import RecordExercise from './components/RecordExercise.vue'
+import RecordInjection from './components/RecordInjection.vue'
+import RecordAgent from './components/RecordAgent.vue'
+import RecordDiet from './components/RecordDiet.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -41,6 +45,10 @@ const onClickOverlay = () => {
     />
     <div class="components-box" v-if="!showSelectRecordTypeSheet">
       <record-blood-sugar v-if="selectedRecordType === 1"></record-blood-sugar>
+      <record-exercise v-if="selectedRecordType === 2"></record-exercise>
+      <record-injection v-if="selectedRecordType === 3"></record-injection>
+      <record-agent v-if="selectedRecordType === 4"></record-agent>
+      <record-diet v-if="selectedRecordType === 5"></record-diet>
     </div>
   </div>
 </template>
