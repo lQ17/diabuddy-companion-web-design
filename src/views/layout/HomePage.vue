@@ -93,13 +93,13 @@ const toSetDiaInfo = () => {
           </van-col>
           <!-- 3. 历史记录 -->
           <van-col class="main-row-1-div check-records col-3">
-            <van-button round type="primary" color="#00cfff" class="check-records-button">
+            <van-button round type="primary" color="#00cfff" class="check-records-button" @click="router.push('/check-record')">
               <van-icon name="todo-list-o" class="right-icon" />
             </van-button>
           </van-col>
           <!-- 4 -->
           <van-col class="main-row-1-div main-row-2-div update-userInfo-quick-button-bottom col-4">
-            <van-button size="small" type="default" round hairline class="col-4" @click="toSetDiaInfo">改信息</van-button>
+            <van-button size="small" type="default" round hairline class="col-4" @click="toSetDiaInfo">改方案</van-button>
           </van-col>
           <!-- 5 -->
           <van-col class="main-row-1-div main-row-2-div add-records-bottom col-5">
@@ -116,7 +116,7 @@ const toSetDiaInfo = () => {
           </van-col>
           <!-- 6 -->
           <van-col class="main-row-1-div main-row-2-div check-records-bottom col-6">
-            <van-button size="small" type="default" round hairline class="col-4">查记录</van-button>
+            <van-button size="small" type="default" round hairline class="col-4" @click="router.push('/check-record')">查记录</van-button>
           </van-col>
         </van-row>
         <van-row class="divider-row">
