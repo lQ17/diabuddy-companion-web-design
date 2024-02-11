@@ -1,45 +1,27 @@
 <script setup>
+// import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import vantComponents from '@/components/vantComponents'
+// const router = useRouter()
+const usernameOrPhone = ref('')
 const onClickLeft = () => history.back()
-const showPopoverRightTop = ref(false)
 const shareList = [
   { sharerName: 'napnap', sharerPhoneHide: '138****1418', sharerRealName: '杨*祥' },
   { sharerName: 'kik kik', sharerPhoneHide: '135****6953', sharerRealName: '王*明' }
 ]
-const SearchOrCheckActions = [
-  { text: '添加亲友', value: 1 },
-  { text: '查看亲友申请', value: 2 }
-]
-const onSelectActions = (action) => {
-  //添加亲友
-  if (action.value === 1) {
-    router.push('/share-add')
-  }
-  //查看亲友申请
-  if (action.value === 2) {
-    router.push('/share-check')
-  }
+const handleAdd = () => {
+  vantComponents.showSuccessToast('已发送请求')
 }
 </script>
 
 <template>
-  <!-- 看亲友 -->
   <div class="page-container">
-    <van-nav-bar title="看亲友" left-text="返回" left-arrow @click-left="onClickLeft" placeholder @click-right="showPopoverRightTop = true">
-      <template #right>
-        <van-popover v-model:show="showPopoverRightTop" :actions="SearchOrCheckActions" @select="onSelectActions" placement="bottom-end">
-          <template #reference>
-            <van-icon name="add-o" size="25px" />
-          </template>
-        </van-popover>
-      </template>
-    </van-nav-bar>
+    <van-nav-bar title="添加亲友" left-text="返回" left-arrow @click-left="onClickLeft" placeholder />
+    <van-search v-model="usernameOrPhone" placeholder="请输入亲友的手机号或者用户名" shape="round" />
     <van-list>
       <div class="cell-group" v-for="(item, index) in shareList" :key="index">
         <van-cell-group inset>
-          <van-cell center is-link to="/">
+          <van-cell center is-link @click="handleAdd">
             <template #title>
               <div class="item-value">{{ item.sharerRealName }}</div>
             </template>
@@ -55,9 +37,6 @@ const onSelectActions = (action) => {
 </template>
 
 <style scoped>
-.item-value {
-  font-size: 20px;
-}
 .cell-group {
   padding-top: 10px;
   /* padding-left: 10px; */

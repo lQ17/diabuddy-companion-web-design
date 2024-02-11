@@ -1,5 +1,5 @@
 // Toast
-import { showToast } from 'vant'
+import { showToast, showSuccessToast } from 'vant'
 import 'vant/es/toast/style'
 
 // Dialog
@@ -18,5 +18,6 @@ export default {
   showToast,
   showDialog,
   showNotify,
-  showImagePreview
+  showImagePreview,
+  showSuccessToast
 }

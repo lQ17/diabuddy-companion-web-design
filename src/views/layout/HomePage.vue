@@ -67,7 +67,7 @@ const toSetDiaInfo = () => {
         </div>
         <span>绑定动态</span>
       </van-col>
-      <van-col class="placeholder-div van-haptics-feedback">
+      <van-col class="placeholder-div van-haptics-feedback" @click="router.push('/share')">
         <div class="icon-placeholder">
           <van-icon name="friends-o" class="row-2-icon" />
         </div>

@@ -4,6 +4,7 @@ import tinyUtilsRouter from '@/router/components/tiny-utils-router.js'
 import foodRouter from './components/food-router'
 import recordRouter from './components/record-router'
 import setDiaInfo from './components/set-dia-info'
+import shareRouter from './components/share-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -25,7 +26,7 @@ const router = createRouter({
     { path: '/ud', component: () => import('@/views/err/UndevelopedPage.vue') },
     // 无法开发
     { path: '/cantd', component: () => import('@/views/err/CantDevelopePage.vue') },
-    { path: '/share', component: () => import('@/views/share/SharePage.vue') },
+    ...shareRouter,
     ...setDiaInfo,
     ...recordRouter,
     ...foodRouter,
