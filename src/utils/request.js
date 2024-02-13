@@ -1,10 +1,10 @@
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores'
 import axios from 'axios'
 import router from '@/router'
 import { showFailToast } from 'vant'
 import 'vant/es/toast/style'
 
-const baseURL = 'http://xxx.com'
+const baseURL = 'http://127.0.0.1:4523/m1/3928753-0-default'
 
 const instance = axios.create({
   baseURL,
@@ -27,7 +27,7 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   (res) => {
-    if (res.data.code === 0) {
+    if (res.data.code === 1) {
       return res
     }
     showFailToast({ message: res.data.message || '服务异常', type: 'error' })

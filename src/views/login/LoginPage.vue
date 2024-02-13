@@ -1,16 +1,95 @@
 <script setup>
+import { useRouter } from 'vue-router'
 import { WinkingFace } from '@icon-park/vue-next'
 import QQIcon from '@/assets/icon/tencent-qq.svg'
 import WXIcon from '@/assets/icon/wechat.svg'
 import { ref } from 'vue'
+import { userLoginByPasswordService, userLoginBySmsService, userGetSmsService } from '@/api/user'
+import { useUserStore } from '@/stores'
+import vantComponents from '@/components/vantComponents'
+const userStore = useUserStore()
+const router = useRouter()
 //仅用于切换“密码登录”和“验证码登录”
 const loginWayChoose = ref(0)
 const loginWayChooseList = ref(['密码登录', '验证码登录'])
 
-// 初始化表单数据
 const emailOrPhone = ref('')
+const phone = ref('')
 const password = ref('')
 const sms = ref('')
+
+// 定义校验规则
+const emailOrPhoneRules = [
+  { message: '邮箱或手机号不能为空', required: true, trigger: 'onSubmit' },
+  { message: '请输入有效的邮箱或手机号', pattern: /(^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$)|(^1[3-9]\d{9}$)/, trigger: 'onSubmit' }
+]
+
+const passwordRules = [
+  { message: '密码不能为空', required: true, trigger: 'onSubmit' },
+  { message: '密码长度至少为6位', pattern: /^\d{6}$/, trigger: 'onSubmit' }
+]
+
+const phoneRules = [
+  { message: '手机号不能为空', required: true, trigger: 'onSubmit' },
+  { message: '请输入有效的手机号', pattern: /^1[3-9]\d{9}$/, trigger: 'onSubmit' }
+]
+
+const smsRules = [
+  { message: '验证码不能为空', required: true, trigger: 'onSubmit' },
+  { message: '验证码为4位数字', pattern: /^\d{4}$/, trigger: 'onSubmit' }
+]
+const onClickLeft = () => history.back()
+
+const onClickRight = () => {
+  router.push('/register')
+}
+
+// 获取sms验证码
+const second = ref(60)
+const totalSecond = 60
+const getSmsCode = async () => {
+  if (!/^[1-9]\d{10}$/.test(phone.value)) {
+    vantComponents.showToast('请输入正确的手机号码')
+    return
+  }
+  try {
+    await userGetSmsService(phone.value)
+    vantComponents.showToast('验证码发送成功，请注意查收')
+    const intervalId = setInterval(() => {
+      second.value--
+      if (second.value === 0) {
+        clearInterval(intervalId)
+        second.value = totalSecond
+      }
+    }, 1000) // 每秒减1
+  } catch (error) {
+    vantComponents.showFailToast('验证码发送失败，请稍后重试')
+  }
+}
+const onLogin = () => {
+  //密码登录
+  if (loginWayChoose.value === 0) {
+    loginByPassword()
+  }
+  //手机验证码登录
+  if (loginWayChoose.value === 1) {
+    loginBySms()
+  }
+}
+
+const loginByPassword = async () => {
+  const res = await userLoginByPasswordService(emailOrPhone.value, password.value)
+  userStore.setToken(res.data.data.token)
+  vantComponents.showSuccessToast('登录成功')
+  router.replace('/')
+}
+
+const loginBySms = async () => {
+  const res = await userLoginBySmsService(phone.value, sms.value)
+  userStore.setToken(res.data.data.token)
+  vantComponents.showSuccessToast('登录成功')
+  router.replace('/')
+}
 </script>
 <template>
   <div>
@@ -53,20 +132,47 @@ const sms = ref('')
     </div>
     <!-- 登录表单 -->
     <div class="login-form">
-      <van-form @submit="onSubmit">
+      <van-form @submit="onLogin">
         <van-cell-group inset :border="true">
-          <van-field class="bordered-field" v-model="emailOrPhone" name="邮箱或手机号" placeholder="邮箱或手机号" />
-          <!-- 密码框  与下面互斥 -->
-          <van-field class="bordered-field" v-if="!loginWayChoose" v-model="password" type="password" name="密码" placeholder="密码" />
-          <!-- 验证码框  与上面互斥 -->
-          <van-field class="bordered-field" v-if="loginWayChoose" v-model="sms" center clearable placeholder="请输入短信验证码">
+          <!-- 密码登录 -->
+          <van-field
+            class="bordered-field"
+            v-if="!loginWayChoose"
+            v-model="emailOrPhone"
+            name="邮箱或手机号"
+            placeholder="邮箱或手机号"
+            :rules="emailOrPhoneRules"
+          />
+          <van-field
+            class="bordered-field"
+            v-if="!loginWayChoose"
+            v-model="password"
+            name="密码"
+            placeholder="密码"
+            type="password"
+            :rules="passwordRules"
+          />
+          <!-- 验证码登录 -->
+          <van-field class="bordered-field" v-if="loginWayChoose" v-model="phone" name="手机号" placeholder="手机号" type="tel" :rules="phoneRules" />
+          <van-field
+            class="bordered-field"
+            v-if="loginWayChoose"
+            v-model="sms"
+            center
+            clearable
+            placeholder="请输入短信验证码"
+            type="digit"
+            :rules="smsRules"
+          >
             <template #button>
-              <van-button size="small" type="primary">发送验证码</van-button>
+              <van-button size="small" type="primary" @click="getSmsCode" :disabled="second !== totalSecond">
+                {{ second === totalSecond ? '获取验证码' : second + '秒后重新发送' }}
+              </van-button>
             </template>
           </van-field>
         </van-cell-group>
         <div style="margin: 16px">
-          <van-button round block type="primary" native-type="submit"> 提交 </van-button>
+          <van-button round block type="primary" native-type="submit"> 登录 </van-button>
         </div>
       </van-form>
     </div>
@@ -103,7 +209,7 @@ const sms = ref('')
 }
 
 .bordered-field {
-  height: 50px;
+  height: 60px;
 }
 .login-way-choose {
   margin-bottom: 30px;
