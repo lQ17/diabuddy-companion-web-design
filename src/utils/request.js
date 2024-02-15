@@ -3,6 +3,7 @@ import axios from 'axios'
 import router from '@/router'
 import { showFailToast } from 'vant'
 import 'vant/es/toast/style'
+import _ from 'lodash'
 
 const baseURL = 'http://127.0.0.1:4523/m1/3928753-0-default'
 
@@ -10,6 +11,26 @@ const instance = axios.create({
   baseURL,
   timeout: 10000
 })
+
+// 使用lodash的camelCase将字符串从snake_case转换为camelCase
+function toCamelCase(str) {
+  return _.camelCase(str)
+}
+
+// 递归地将对象键从snake_case转换为camelCase
+function keysToCamelCase(object) {
+  if (_.isObject(object)) {
+    if (_.isArray(object)) {
+      return object.map(keysToCamelCase)
+    } else {
+      return _.mapValues(
+        _.mapKeys(object, (value, key) => toCamelCase(key)),
+        keysToCamelCase
+      )
+    }
+  }
+  return object
+}
 
 // 请求拦截器
 instance.interceptors.request.use(
@@ -27,6 +48,7 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   (res) => {
+    res.data = keysToCamelCase(res.data)
     if (res.data.code === 1) {
       return res
     }
