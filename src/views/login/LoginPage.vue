@@ -81,13 +81,18 @@ const loginByPassword = async () => {
   const res = await userLoginByPasswordService(emailOrPhone.value, password.value)
   userStore.setToken(res.data.data.token)
   vantComponents.showSuccessToast('登录成功')
-  router.replace('/')
+  replaceToHome()
 }
 
 const loginBySms = async () => {
   const res = await userLoginBySmsService(phone.value, sms.value)
   userStore.setToken(res.data.data.token)
   vantComponents.showSuccessToast('登录成功')
+  replaceToHome()
+}
+
+const replaceToHome = () => {
+  userStore.getUser()
   router.replace('/')
 }
 </script>

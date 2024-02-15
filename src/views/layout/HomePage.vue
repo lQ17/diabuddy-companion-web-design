@@ -10,15 +10,22 @@ import {
   CalculatorOne as IconCalculatorOne,
   AlarmClock as IconAlarmClock
 } from '@icon-park/vue-next'
-
+import { onMounted, ref } from 'vue'
+import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
+const userStore = useUserStore()
 const router = useRouter()
+
 const toRecordSth = () => {
   router.push('/record')
 }
 const toSetDiaInfo = () => {
   router.push('/set-dia-info')
 }
+const userPic = ref('')
+onMounted(() => {
+  userPic.value = userStore.user.userPic
+})
 </script>
 <template>
   <div class="page-container">
@@ -26,7 +33,7 @@ const toSetDiaInfo = () => {
     <van-row type="flex" justify="space-between" class="custom-row">
       <!-- 头像 -->
       <van-col class="image-col" @click="router.push('/user')">
-        <van-image round width="50" height="50" fit="cover" position="center" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg">
+        <van-image round width="50" height="50" fit="cover" position="center" :src="userPic">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
           </template>

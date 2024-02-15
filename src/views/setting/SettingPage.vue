@@ -1,5 +1,21 @@
 <script setup>
+import { useUserStore } from '@/stores'
+import { useRouter } from 'vue-router'
+import vantComponents from '@/components/vantComponents'
+const router = useRouter()
+const userStore = useUserStore()
 const onClickLeft = () => history.back()
+const onLogout = () => {
+  vantComponents
+    .showConfirmDialog({
+      title: '确定退出？'
+    })
+    .then(() => {
+      userStore.removeToken()
+      userStore.setUser({})
+      router.replace('/login')
+    })
+}
 </script>
 
 <template>
@@ -30,7 +46,7 @@ const onClickLeft = () => history.back()
     </div>
     <div class="outside-logout-box">
       <div class="logout-box">
-        <van-button class="logout-btn" color="#9a9a9a" size="large" round>退出登录</van-button>
+        <van-button class="logout-btn" color="#9a9a9a" size="large" round @click="onLogout">退出登录</van-button>
       </div>
     </div>
   </div>

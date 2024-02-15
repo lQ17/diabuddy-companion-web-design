@@ -3,7 +3,7 @@ import { showToast, showSuccessToast, showFailToast } from 'vant'
 import 'vant/es/toast/style'
 
 // Dialog
-import { showDialog } from 'vant'
+import { showDialog, showConfirmDialog } from 'vant'
 import 'vant/es/dialog/style'
 
 // Notify
@@ -17,6 +17,7 @@ import 'vant/es/image-preview/style'
 export default {
   showToast,
   showDialog,
+  showConfirmDialog,
   showNotify,
   showImagePreview,
   showSuccessToast,

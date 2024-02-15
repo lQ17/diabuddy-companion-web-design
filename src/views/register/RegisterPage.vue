@@ -119,6 +119,11 @@ const registerByPhone = async () => {
   const res = await userRegisterByPhoneService(phone.value, password.value, repassword.value, sms.value)
   vantComponents.showSuccessToast('注册成功，将自动登录')
   userStore.setToken(res.data.data.token)
+  replaceToHome()
+}
+
+const replaceToHome = () => {
+  userStore.getUser()
   router.replace('/')
 }
 </script>

@@ -1,17 +1,24 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useUserStore } from '@/stores'
+const userStore = useUserStore()
 const onClickLeft = () => history.back()
 
 // 用户头像 URL
-const avatarUrl = ref('https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg')
+const userPic = ref('')
+const username = ref('')
+onMounted(() => {
+  userPic.value = userStore.user.userPic
+  username.value = userStore.user.username
+})
 </script>
 
 <template>
   <div class="page-container">
     <van-nav-bar title="账号设置" left-text="返回" left-arrow @click-left="onClickLeft" placeholder />
     <div class="avatar-box">
-      <van-uploader>
-        <van-image round width="70" height="70" fit="cover" position="center" :src="avatarUrl" @click="showActionSheet = true">
+      <van-uploader accept="image/*">
+        <van-image round width="70" height="70" fit="cover" position="center" :src="userPic" @click="showActionSheet = true">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
           </template>
@@ -25,7 +32,7 @@ const avatarUrl = ref('https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg')
     </div>
     <div class="cell-group">
       <van-cell-group>
-        <van-cell title="用户名" is-link to="/setting/setting-username" />
+        <van-cell title="用户名" is-link to="/setting/setting-username" :value="username" />
       </van-cell-group>
     </div>
     <div class="cell-group">

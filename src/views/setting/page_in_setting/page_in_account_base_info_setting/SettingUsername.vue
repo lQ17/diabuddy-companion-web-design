@@ -1,6 +1,13 @@
 <script setup>
 const onClickLeft = () => history.back()
+import { ref, onMounted } from 'vue'
+import { useUserStore } from '@/stores'
+const userStore = useUserStore()
 //记得做用户名回显
+const username = ref('')
+onMounted(() => {
+  username.value = userStore.user.username
+})
 </script>
 
 <template>
@@ -9,7 +16,14 @@ const onClickLeft = () => history.back()
     <div class="setting-box">
       <van-form @submit="onSubmit">
         <van-cell-group inset>
-          <van-field v-model="username" name="用户名" label="用户名" placeholder="用户名" :rules="[{ required: true, message: '请填写用户名' }]" />
+          <van-field
+            v-model="username"
+            name="用户名"
+            label="用户名"
+            placeholder="用户名"
+            :rules="[{ required: true, message: '请填写用户名' }]"
+            clear-trigger="focus"
+          />
         </van-cell-group>
         <div style="margin: 16px">
           <van-button round block type="primary" native-type="submit"> 确定 </van-button>

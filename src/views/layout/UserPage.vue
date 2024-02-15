@@ -9,7 +9,18 @@ import {
 } from '@icon-park/vue-next'
 
 import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import { useUserStore } from '@/stores'
 const router = useRouter()
+const userStore = useUserStore()
+const user = ref({
+  username: '',
+  userPic: '',
+  existDay: 0
+})
+onMounted(() => {
+  user.value = { ...userStore.user }
+})
 </script>
 <template>
   <div class="page-container">
@@ -17,7 +28,7 @@ const router = useRouter()
     <div class="user-base-info">
       <!-- 头像 -->
       <div class="avatar">
-        <van-image round width="60" height="60" fit="cover" position="center" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg">
+        <van-image round width="60" height="60" fit="cover" position="center" :src="user.userPic">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
           </template>
@@ -26,8 +37,8 @@ const router = useRouter()
       </div>
       <!-- 用户名、存在时间 -->
       <div class="user-info">
-        <div class="username">用户名</div>
-        <div class="user-existence-time">用户已存在167天</div>
+        <div class="username">{{ user.username }}</div>
+        <div class="user-existence-time">用户已存在{{ user.existDay }}天</div>
       </div>
       <!-- 用户类别（普通用户） -->
       <div class="user-type">
