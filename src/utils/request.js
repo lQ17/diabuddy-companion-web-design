@@ -32,6 +32,26 @@ function keysToCamelCase(object) {
   return object
 }
 
+// 使用lodash的snakeCase将字符串从camelCase转换为snake_case
+function toSnakeCase(str) {
+  return _.snakeCase(str)
+}
+
+// 递归地将对象键从camelCase转换为snake_case
+function keysToSnakeCase(object) {
+  if (_.isObject(object)) {
+    if (_.isArray(object)) {
+      return object.map(keysToSnakeCase)
+    } else {
+      return _.mapValues(
+        _.mapKeys(object, (value, key) => toSnakeCase(key)),
+        keysToSnakeCase
+      )
+    }
+  }
+  return object
+}
+
 // 请求拦截器
 instance.interceptors.request.use(
   (config) => {
@@ -39,6 +59,9 @@ instance.interceptors.request.use(
     const userStore = useUserStore()
     if (userStore.token) {
       config.headers.Authorization = userStore.token
+    }
+    if (config.data) {
+      config.data = keysToSnakeCase(config.data)
     }
     return config
   },

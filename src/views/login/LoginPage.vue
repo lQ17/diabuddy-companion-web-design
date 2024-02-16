@@ -6,7 +6,7 @@ import WXIcon from '@/assets/icon/wechat.svg'
 import { ref } from 'vue'
 import { userLoginByPasswordService, userLoginBySmsService, userGetSmsService } from '@/api/user'
 import { useUserStore } from '@/stores'
-import vantComponents from '@/components/vantComponents'
+import { showToast, showFailToast, showSuccessToast } from '@/components/vantComponents'
 const userStore = useUserStore()
 const router = useRouter()
 //仅用于切换“密码登录”和“验证码登录”
@@ -26,7 +26,7 @@ const emailOrPhoneRules = [
 
 const passwordRules = [
   { message: '密码不能为空', required: true, trigger: 'onSubmit' },
-  { message: '密码长度至少为6位', pattern: /^\d{6}$/, trigger: 'onSubmit' }
+  { message: '密码长度至少为6位', pattern: /^.{6,}$/, trigger: 'onSubmit' }
 ]
 
 const phoneRules = [
@@ -49,12 +49,12 @@ const second = ref(60)
 const totalSecond = 60
 const getSmsCode = async () => {
   if (!/^[1-9]\d{10}$/.test(phone.value)) {
-    vantComponents.showToast('请输入正确的手机号码')
+    showToast('请输入正确的手机号码')
     return
   }
   try {
     await userGetSmsService(phone.value)
-    vantComponents.showToast('验证码发送成功，请注意查收')
+    showToast('验证码发送成功，请注意查收')
     const intervalId = setInterval(() => {
       second.value--
       if (second.value === 0) {
@@ -63,7 +63,7 @@ const getSmsCode = async () => {
       }
     }, 1000) // 每秒减1
   } catch (error) {
-    vantComponents.showFailToast('验证码发送失败，请稍后重试')
+    showFailToast('验证码发送失败，请稍后重试')
   }
 }
 const onLogin = () => {
@@ -80,14 +80,14 @@ const onLogin = () => {
 const loginByPassword = async () => {
   const res = await userLoginByPasswordService(emailOrPhone.value, password.value)
   userStore.setToken(res.data.data.token)
-  vantComponents.showSuccessToast('登录成功')
+  showSuccessToast('登录成功')
   replaceToHome()
 }
 
 const loginBySms = async () => {
   const res = await userLoginBySmsService(phone.value, sms.value)
   userStore.setToken(res.data.data.token)
-  vantComponents.showSuccessToast('登录成功')
+  showSuccessToast('登录成功')
   replaceToHome()
 }
 

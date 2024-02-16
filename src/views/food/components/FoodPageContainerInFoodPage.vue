@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 import FoodListItem from '@/views/food/components/FoodListItem.vue'
-import { foodGetListByCategoryAndTinyService } from '@/api/food'
+import { foodGetListService } from '@/api/food'
 const props = defineProps({
   foodCategory: {
     required: true,
@@ -30,10 +30,8 @@ const onLoad = async () => {
 const foodListByCategoryAndTinyCategory = ref([])
 
 const getListByCategoryAndTinyCategory = async () => {
-  const res = await foodGetListByCategoryAndTinyService(props.foodCategory, props.foodTinyCategory)
-  console.log(res.data.data.list)
+  const res = await foodGetListService({ foodCategory: props.foodCategory, foodTinyCategory: props.foodTinyCategory })
   foodListByCategoryAndTinyCategory.value = res.data.data.list
-  console.log(foodListByCategoryAndTinyCategory.value[0].food_name)
 }
 
 // 监视 props.foodCategory 和 props.foodTinyCategory 的变化

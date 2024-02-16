@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import FoodListItem from './components/FoodListItem.vue'
-const defaultFoodImg = 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'
+import { foodGetListService } from '@/api/food'
 const route = useRoute()
 const router = useRouter()
 const onClickLeft = () => history.back()
@@ -14,14 +14,10 @@ const onClick = () => {
   router.replace('/foodsearch')
 }
 // 列表
-const foodList = ref([
-  { foodId: 1, foodName: '苹果', cal: 53, carb: 13.7, img: defaultFoodImg },
-  { foodId: 2, foodName: '香蕉', cal: 93, carb: 22, img: defaultFoodImg },
-  { foodId: 3, foodName: '草莓', cal: 32, carb: 7.1, img: defaultFoodImg }
-])
+const foodList = ref([])
 const foodListLoading = ref(false)
 const foodListFinished = ref(false)
-const onLoad = () => {
+const onLoad = async () => {
   // 异步更新数据
   // setTimeout 仅做示例，真实场景中一般为 ajax 请求
   // setTimeout(() => {
@@ -35,6 +31,8 @@ const onLoad = () => {
   //     foodListFinished.value = true
   //   }
   // }, 1000)
+  const res = await foodGetListService({ foodName: searchValue.value })
+  foodList.value = res.data.data.list
   foodListLoading.value = false
   foodListFinished.value = true
 }

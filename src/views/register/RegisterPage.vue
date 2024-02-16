@@ -1,6 +1,6 @@
 <script setup>
 import { WinkingFace } from '@icon-park/vue-next'
-import vantComponents from '@/components/vantComponents'
+import { showToast, showFailToast, showSuccessToast } from '@/components/vantComponents'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores'
@@ -59,12 +59,12 @@ const second = ref(60)
 const totalSecond = 60
 const getSmsCode = async () => {
   if (!/^[1-9]\d{10}$/.test(phone.value)) {
-    vantComponents.showToast('请输入正确的手机号码')
+    showToast('请输入正确的手机号码')
     return
   }
   try {
     await userGetSmsService(phone.value)
-    vantComponents.showToast('验证码发送成功，请注意查收')
+    showToast('验证码发送成功，请注意查收')
     const intervalId = setInterval(() => {
       second.value--
       if (second.value === 0) {
@@ -73,7 +73,7 @@ const getSmsCode = async () => {
       }
     }, 1000) // 每秒减1
   } catch (error) {
-    vantComponents.showFailToast('验证码发送失败，请稍后重试')
+    showFailToast('验证码发送失败，请稍后重试')
   }
 }
 
@@ -82,12 +82,12 @@ const emailSecond = ref(60)
 const totalEamilSecond = 60
 const getEmailMsg = async () => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-    vantComponents.showToast('请输入正确的邮箱')
+    showToast('请输入正确的邮箱')
     return
   }
   try {
     await userGetEamilMsgService(email.value)
-    vantComponents.showToast('验证码发送成功，请注意查收')
+    showToast('验证码发送成功，请注意查收')
     const intervalId = setInterval(() => {
       emailSecond.value--
       if (emailSecond.value === 0) {
@@ -96,7 +96,7 @@ const getEmailMsg = async () => {
       }
     }, 1000) // 每秒减1
   } catch (error) {
-    vantComponents.showFailToast('验证码发送失败，请稍后重试')
+    showFailToast('验证码发送失败，请稍后重试')
   }
 }
 
@@ -112,12 +112,12 @@ const onSubmit = () => {
 }
 const registerByEmail = async () => {
   await userRegisterByEmailService(email.value, password.value, repassword.value, emailMsg.value)
-  vantComponents.showSuccessToast('注册成功')
+  showSuccessToast('注册成功')
   router.replace('/login')
 }
 const registerByPhone = async () => {
   const res = await userRegisterByPhoneService(phone.value, password.value, repassword.value, sms.value)
-  vantComponents.showSuccessToast('注册成功，将自动登录')
+  showSuccessToast('注册成功，将自动登录')
   userStore.setToken(res.data.data.token)
   replaceToHome()
 }

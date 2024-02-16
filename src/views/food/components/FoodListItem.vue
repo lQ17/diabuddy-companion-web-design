@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue'
 import { defineProps } from 'vue'
 const props = defineProps({
   food: {
@@ -6,16 +7,27 @@ const props = defineProps({
     default: () => ({})
   }
 })
-const energyText = `热量 ${props.food.energy}千卡 /100克`
-const energyKeywords = [`${props.food.energy}`, `千卡`, `热量`]
-const carbText = `碳水 ${props.food.carb}克 /100克`
-const carbKeywords = [`${props.food.carb}`, `碳水`, `克 `]
+const energyText = computed(() => {
+  // 确保 food.energy 是一个数字
+  const energy = parseFloat(props.food.energy)
+  return `热量 ${energy.toFixed(2)}千卡 /100克`
+})
+
+const energyKeywords = computed(() => [`${props.food.energy.toFixed(2)}`, `千卡`, `热量`])
+
+const carbText = computed(() => {
+  // 确保 food.carb 是一个数字
+  const carb = parseFloat(props.food.carb)
+  return `碳水 ${carb.toFixed(2)}克 /100克`
+})
+
+const carbKeywords = computed(() => [`${props.food.carb.toFixed(2)}`, `碳水`, `克 `])
 </script>
 <template>
   <div class="food-list-item">
     <van-cell center>
       <template #icon>
-        <van-image width="70px" height="70px" fit="cover" position="center" :src="props.food.img" />
+        <van-image width="70px" height="70px" fit="cover" position="center" :src="props.food.foodPic" />
       </template>
       <template #title>
         <div class="title-box">{{ props.food.foodName }}</div>

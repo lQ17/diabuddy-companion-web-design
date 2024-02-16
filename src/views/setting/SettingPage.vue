@@ -1,20 +1,18 @@
 <script setup>
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
-import vantComponents from '@/components/vantComponents'
+import { showConfirmDialog } from '@/components/vantComponents'
 const router = useRouter()
 const userStore = useUserStore()
 const onClickLeft = () => history.back()
 const onLogout = () => {
-  vantComponents
-    .showConfirmDialog({
-      title: '确定退出？'
-    })
-    .then(() => {
-      userStore.removeToken()
-      userStore.setUser({})
-      router.replace('/login')
-    })
+  showConfirmDialog({
+    title: '确定退出？'
+  }).then(() => {
+    userStore.removeToken()
+    userStore.setUser({})
+    router.replace('/login')
+  })
 }
 </script>
 

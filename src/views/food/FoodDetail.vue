@@ -1,32 +1,56 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { foodGetDetailService } from '@/api/food'
+import { showLoadingToast, closeToast } from '@/components/vantComponents'
 const route = useRoute()
-
 const onClickLeft = () => history.back()
+const foodId = route.query.foodId
+const toMoreDetailPage = `/food-detail-more?foodId=${foodId}`
 
-const foodId = ref(0)
-foodId.value = route.query.foodId
-const toMoreDetailPage = `/food-detail-more?foodId=${foodId.value}`
-const carbCurrentRate = ref(77)
-const proteinCurrentRate = ref(14)
-const fatCurrentRate = ref(9)
-const carbText = computed(() => carbCurrentRate.value.toFixed(0) + '%')
-const proteinText = computed(() => proteinCurrentRate.value.toFixed(0) + '%')
-const fatText = computed(() => fatCurrentRate.value.toFixed(0) + '%')
+const currentFood = ref({})
+// 三大营养功能比视图数据
+const E = computed(() => currentFood.value.fat * 9 + currentFood.value.protein * 4 + currentFood.value.carb * 4)
+const F = computed(() => currentFood.value.fat * 9)
+const P = computed(() => currentFood.value.protein * 4)
+const C = computed(() => currentFood.value.carb * 4)
+const carbCurrentRate = computed(() => (C.value / E.value) * 100)
+const proteinCurrentRate = computed(() => (P.value / E.value) * 100)
+const fatCurrentRate = computed(() => (F.value / E.value) * 100)
+const carbText = computed(() => carbCurrentRate.value.toFixed(0).toString() + '%')
+const proteinText = computed(() => proteinCurrentRate.value.toFixed(0).toString() + '%')
+const fatText = computed(() => fatCurrentRate.value.toFixed(0).toString() + '%')
+const getDetail = async () => {
+  const res = await foodGetDetailService(foodId)
+  currentFood.value = res.data.data
+}
+onMounted(() => {
+  getDetail()
+  closeToast(true)
+  loading.value = false
+})
+// 加载
+const loading = ref(true)
+showLoadingToast({
+  message: '加载中...',
+  forbidClick: true,
+  duration: 0,
+  loadingType: 'spinner'
+})
 </script>
 <template>
-  <div class="page-container">
+  <div v-if="loading"></div>
+  <div class="page-container" v-else>
     <!-- 再根据id查一次数据库，拿到完整数据 -->
-    <van-nav-bar left-text="苹果" :title="foodId" left-arrow @click-left="onClickLeft" placeholder />
+    <van-nav-bar left-text="返回" :title="foodId" left-arrow @click-left="onClickLeft" placeholder />
     <div class="cell-group">
       <van-cell-group inset>
         <van-cell center>
           <template #icon>
-            <van-image width="70px" height="70px" fit="cover" position="center" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
+            <van-image width="70px" height="70px" fit="cover" position="center" :src="currentFood.foodPic" />
           </template>
           <template #title>
-            <div class="title-box">苹果</div>
+            <div class="title-box">{{ currentFood.foodName }}</div>
           </template>
         </van-cell>
         <van-row>
@@ -69,8 +93,8 @@ const fatText = computed(() => fatCurrentRate.value.toFixed(0) + '%')
             <div id="eating-part">每100克 可食部</div>
           </van-col>
         </van-row>
-        <van-cell title="千卡"> 53 千卡</van-cell>
-        <van-cell title="千焦"> {{ 55 * 4.184 }} 千焦</van-cell>
+        <van-cell title="千卡"> {{ currentFood.energy }} 千卡</van-cell>
+        <van-cell title="千焦"> {{ (currentFood.energy * 4.184).toFixed(1) }} 千焦</van-cell>
       </van-cell-group>
     </div>
     <div class="cell-group">
@@ -83,8 +107,8 @@ const fatText = computed(() => fatCurrentRate.value.toFixed(0) + '%')
             <div id="explain-font">一型糖尿病患者更需关注热量和碳水含量</div>
           </van-col>
         </van-row>
-        <van-cell title="GI"> 36</van-cell>
-        <van-cell title="GL"> 4.9</van-cell>
+        <van-cell title="GI"> {{ currentFood.glycemicIndex }}</van-cell>
+        <van-cell title="GL"> {{ currentFood.glycemicLoad }}</van-cell>
       </van-cell-group>
     </div>
     <div class="cell-group last-group">
@@ -98,7 +122,7 @@ const fatText = computed(() => fatCurrentRate.value.toFixed(0) + '%')
           <van-col span="8">
             <div class="circle-box">
               <van-circle
-                v-model:current-rate="carbCurrentRate"
+                :current-rate="carbCurrentRate"
                 :rate="carbCurrentRate"
                 :stroke-width="60"
                 size="80px"
@@ -117,7 +141,7 @@ const fatText = computed(() => fatCurrentRate.value.toFixed(0) + '%')
           <van-col span="8">
             <div class="circle-box">
               <van-circle
-                v-model:current-rate="proteinCurrentRate"
+                :current-rate="proteinCurrentRate"
                 :rate="proteinCurrentRate"
                 :stroke-width="60"
                 size="80px"
@@ -135,14 +159,7 @@ const fatText = computed(() => fatCurrentRate.value.toFixed(0) + '%')
           </van-col>
           <van-col span="8">
             <div class="circle-box">
-              <van-circle
-                v-model:current-rate="fatCurrentRate"
-                :rate="fatCurrentRate"
-                :stroke-width="60"
-                size="80px"
-                color="#f04d51"
-                layer-color="#ebedf0"
-              >
+              <van-circle :current-rate="fatCurrentRate" :rate="fatCurrentRate" :stroke-width="60" size="80px" color="#f04d51" layer-color="#ebedf0">
                 <template #default>
                   <div class="circle-inner-box">
                     <div class="circle-font-box">蛋白质</div>
@@ -156,12 +173,11 @@ const fatText = computed(() => fatCurrentRate.value.toFixed(0) + '%')
             <van-divider>三大营养元素供能比</van-divider>
           </van-col>
         </van-row>
-        <van-cell title="热量"> 53千卡</van-cell>
-        <van-cell title="蛋白质"> 0.4克</van-cell>
-        <van-cell title="脂肪"> 0.2克</van-cell>
-        <van-cell title="碳水化合物"> 13.7克</van-cell>
-        <van-cell title="膳食纤维"> 0.2克</van-cell>
-        <van-cell title="钠"> 0.2克</van-cell>
+        <van-cell title="碳水化合物"> {{ currentFood.carb }}克</van-cell>
+        <van-cell title="脂肪"> {{ currentFood.fat }}克</van-cell>
+        <van-cell title="蛋白质"> {{ currentFood.protein }}克</van-cell>
+        <van-cell title="膳食纤维"> {{ currentFood.dietaryFiber }}克</van-cell>
+        <van-cell title="钠"> {{ currentFood.sodium }}克</van-cell>
         <van-cell title="更多营养信息" is-link :to="toMoreDetailPage" />
       </van-cell-group>
     </div>

@@ -1,5 +1,5 @@
 <script setup>
-import vantComponents from '@/components/vantComponents'
+import { showToast } from '@/components/vantComponents'
 import RecordBloodSugar from './components/RecordBloodSugar.vue'
 import RecordExercise from './components/RecordExercise.vue'
 import RecordInjection from './components/RecordInjection.vue'
@@ -26,7 +26,7 @@ const onClickOverlay = () => {
   showSelectRecordTypeSheet.value = false
   // 默认选择记录血糖
   selectedRecordType.value = 1
-  vantComponents.showToast('已默认选择记录血糖')
+  showToast('已默认选择记录血糖')
 }
 </script>
 <template>

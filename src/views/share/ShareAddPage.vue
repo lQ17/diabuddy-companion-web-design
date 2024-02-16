@@ -1,7 +1,7 @@
 <script setup>
 // import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import vantComponents from '@/components/vantComponents'
+import { showSuccessToast } from '@/components/vantComponents'
 // const router = useRouter()
 const usernameOrPhone = ref('')
 const onClickLeft = () => history.back()
@@ -10,7 +10,7 @@ const shareList = [
   { sharerName: 'kik kik', sharerPhoneHide: '135****6953', sharerRealName: '王*明' }
 ]
 const handleAdd = () => {
-  vantComponents.showSuccessToast('已发送请求')
+  showSuccessToast('已发送请求')
 }
 </script>
 

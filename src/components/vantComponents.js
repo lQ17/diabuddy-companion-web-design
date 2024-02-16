@@ -1,5 +1,5 @@
 // Toast
-import { showToast, showSuccessToast, showFailToast } from 'vant'
+import { showToast, showSuccessToast, showFailToast, showLoadingToast, closeToast } from 'vant'
 import 'vant/es/toast/style'
 
 // Dialog
@@ -14,12 +14,4 @@ import 'vant/es/notify/style'
 import { showImagePreview } from 'vant'
 import 'vant/es/image-preview/style'
 
-export default {
-  showToast,
-  showDialog,
-  showConfirmDialog,
-  showNotify,
-  showImagePreview,
-  showSuccessToast,
-  showFailToast
-}
+export { showToast, showDialog, showConfirmDialog, showNotify, showImagePreview, showSuccessToast, showFailToast, showLoadingToast, closeToast }
