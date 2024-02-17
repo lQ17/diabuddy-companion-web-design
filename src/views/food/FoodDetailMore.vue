@@ -20,7 +20,7 @@ onMounted(() => {
 <template>
   <div class="page-container">
     <!-- 再根据id查一次数据库，拿到完整数据 -->
-    <van-nav-bar left-text="苹果" :title="foodId" left-arrow @click-left="onClickLeft" placeholder />
+    <van-nav-bar :left-text="currentFood.foodName || '返回'" :title="foodId" left-arrow @click-left="onClickLeft" placeholder />
 
     <div class="cell-group">
       <van-cell-group inset>

@@ -1,32 +1,67 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, toRefs, computed } from 'vue'
 import foodCategoryColumns from '@/components/FoodCategoryColumns.js'
-import { useUploadFoodStore } from '@/stores'
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
+import { useUploadFoodStore, useUserStore } from '@/stores'
+import { foodUserAddFoodService } from '@/api/food'
 const onClickLeft = () => history.back()
-// 存储食物数据
 const uploadFoodStore = useUploadFoodStore()
+const userStore = useUserStore()
 
 // 显示、交互控制
-const showFoodCategoryPicker = ref(false)
-const onFoodCategoryPickerConfirm = ({ selectedOptions }) => {
-  showFoodCategoryPicker.value = false
+const showfoodCategoryStrPicker = ref(false)
+const onfoodCategoryStrPickerConfirm = ({ selectedOptions }) => {
+  showfoodCategoryStrPicker.value = false
   const selectedOption1 = selectedOptions[0] // 第一列选中项
   const selectedOption2 = selectedOptions[1] // 第二列选中项
-  // 将两列选中项的 text 拼接起来作为 foodCategory 的值
-  uploadFoodStore.updateField('foodCategory', `${selectedOption1.text},${selectedOption2.text}`)
+  // 将两列选中项的 text 拼接起来作为 foodCategoryStr 的值
+  uploadFoodStore.updateField('foodCategoryStr', `${selectedOption1.text} : ${selectedOption2.text}`)
 }
 
+//按钮
 const comfirmUpload = () => {
   console.log('通过api存入数据库')
-  uploadFoodStore.resetData()
+  userAddFood()
+}
+// 将 store 的所有 ref 响应式对象转换为局部变量
+const { foodCategoryStr, weightValue, energyUnit, updateField, resetData, ...restRefs } = toRefs(uploadFoodStore)
+
+//不让报错，懒得改了
+foodCategoryStr
+weightValue
+energyUnit
+updateField
+resetData
+
+const payload = computed(() => {
+  const data = {
+    ...Object.keys(restRefs).reduce((acc, key) => {
+      acc[key] = restRefs[key].value
+      return acc
+    }, {}),
+    userId: userStore.user.id
+  }
+
+  if (uploadFoodStore.energyUnit === '2') {
+    data.energy = (uploadFoodStore.energy / 4.184).toFixed(0)
+  }
+
+  return data
+})
+
+const userAddFood = async () => {
+  try {
+    console.log(payload.value)
+    await foodUserAddFoodService(payload.value)
+    await uploadFoodStore.resetData()
+  } catch (error) {
+    console.error('Error adding food:', error)
+  }
 }
 </script>
 
 <template>
   <div class="page-container">
-    <van-nav-bar title="食物预设" left-text="返回" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar title="食物上传" left-text="返回" left-arrow @click-left="onClickLeft" />
     <div class="warning-box">
       <div class="warning-font-box">
         你可以在这里上传包装食物、自制的食物。也可以选择仅自己可见，或所有人可见。上传所有人可见的公共食物，需要经过审核。
@@ -57,42 +92,42 @@ const comfirmUpload = () => {
           </van-cell>
         </van-cell-group>
       </div>
-      <div class="input-box" v-if="true">
+      <div class="input-box" v-if="uploadFoodStore.isPackedFood">
         <van-cell-group inset>
           <van-field v-model="uploadFoodStore.brandName" label="品牌名称" input-align="right" />
         </van-cell-group>
       </div>
-      <div class="input-box" v-if="true">
+      <div class="input-box">
         <van-cell-group inset>
-          <van-field v-model="uploadFoodStore.foodCategory" is-link readonly label="食物分类" @click="showFoodCategoryPicker = true" />
+          <van-field v-model="uploadFoodStore.foodCategoryStr" is-link readonly label="食物分类" @click="showfoodCategoryStrPicker = true" />
         </van-cell-group>
-        <van-popup v-model:show="showFoodCategoryPicker" round position="bottom">
-          <van-picker :columns="foodCategoryColumns" @cancel="showFoodCategoryPicker = false" @confirm="onFoodCategoryPickerConfirm" />
+        <van-popup v-model:show="showfoodCategoryStrPicker" round position="bottom">
+          <van-picker :columns="foodCategoryColumns" @cancel="showfoodCategoryStrPicker = false" @confirm="onfoodCategoryStrPickerConfirm" />
         </van-popup>
       </div>
-      <div class="input-box" v-if="true">
+      <div class="input-box">
         <van-cell-group inset>
           <van-field name="uploader" input-align="right" label="上传图片">
             <template #input>
-              <van-uploader v-model="uploadFoodStore.uploadFoodPhotoValue" :max-count="1" preview-size="40" />
+              <van-uploader v-model="uploadFoodStore.foodPic[0]" :max-count="1" preview-size="40" />
             </template>
           </van-field>
         </van-cell-group>
       </div>
-      <div class="input-box" v-if="true">
+      <div class="input-box" v-if="uploadFoodStore.isPackedFood">
         <van-cell-group inset>
           <van-field name="uploader" input-align="right" label="营养成分表">
             <template #input>
-              <van-uploader v-model="uploadFoodStore.uploadNutritionPhotoValue" :max-count="1" preview-size="40" />
+              <van-uploader v-model="uploadFoodStore.foodPic[1]" :max-count="1" preview-size="40" />
             </template>
           </van-field>
         </van-cell-group>
       </div>
-      <div class="input-box" v-if="true">
+      <div class="input-box" v-if="uploadFoodStore.isPackedFood">
         <van-cell-group inset>
           <van-field name="uploader" input-align="right" label="配料表">
             <template #input>
-              <van-uploader v-model="uploadFoodStore.uploadIngredientPhotoValue" :max-count="1" preview-size="40" />
+              <van-uploader v-model="uploadFoodStore.foodPic[2]" :max-count="1" preview-size="40" />
             </template>
           </van-field>
         </van-cell-group>
@@ -102,7 +137,7 @@ const comfirmUpload = () => {
     <div class="nutrition-info-box">
       <div class="input-box">
         <van-cell-group inset>
-          <van-field v-model="uploadFoodStore.weightValue" label="数据单位" input-align="right" type="number">
+          <van-field v-model="uploadFoodStore.weightValue" label="数据单位" input-align="right" type="number" disabled>
             <template #right-icon>
               <div>克</div>
             </template>
@@ -111,7 +146,7 @@ const comfirmUpload = () => {
       </div>
       <div class="input-box">
         <van-cell-group inset>
-          <van-field v-model="uploadFoodStore.energyValue" input-align="right" type="number" class="set-width-field">
+          <van-field v-model="uploadFoodStore.energy" input-align="right" type="number" class="set-width-field">
             <template #label>
               <van-row>
                 <van-col span="6">
@@ -136,7 +171,7 @@ const comfirmUpload = () => {
       </div>
       <div class="input-box">
         <van-cell-group inset>
-          <van-field v-model="uploadFoodStore.carbValue" label="碳水化合物" input-align="right" type="number">
+          <van-field v-model="uploadFoodStore.carb" label="碳水化合物" input-align="right" type="number">
             <template #right-icon>
               <div>克</div>
             </template>
@@ -145,7 +180,7 @@ const comfirmUpload = () => {
       </div>
       <div class="input-box">
         <van-cell-group inset>
-          <van-field v-model="uploadFoodStore.proteinValue" label="蛋白质" input-align="right" type="number">
+          <van-field v-model="uploadFoodStore.protein" label="蛋白质" input-align="right" type="number">
             <template #right-icon>
               <div>克</div>
             </template>
@@ -154,7 +189,7 @@ const comfirmUpload = () => {
       </div>
       <div class="input-box">
         <van-cell-group inset>
-          <van-field v-model="uploadFoodStore.fatValue" label="脂肪" input-align="right" type="number">
+          <van-field v-model="uploadFoodStore.fat" label="脂肪" input-align="right" type="number">
             <template #right-icon>
               <div>克</div>
             </template>
@@ -163,7 +198,7 @@ const comfirmUpload = () => {
       </div>
       <div class="input-box">
         <van-cell-group inset>
-          <van-field v-model="uploadFoodStore.sodiumValue" label="钠" input-align="right" type="number">
+          <van-field v-model="uploadFoodStore.sodium" label="钠" input-align="right" type="number">
             <template #right-icon>
               <div>毫克</div>
             </template>

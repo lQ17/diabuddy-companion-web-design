@@ -1,12 +1,15 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { foodGetDetailService } from '@/api/food'
+import { foodGetDetailService, foodAddUserFavoriteService, foodDeleteUserFavoriteService, foodGetUserFavoriteService } from '@/api/food'
 import { showLoadingToast, closeToast } from '@/components/vantComponents'
+import { useUserStore } from '@/stores'
 const route = useRoute()
+const userStore = useUserStore()
 const onClickLeft = () => history.back()
 const foodId = route.query.foodId
 const toMoreDetailPage = `/food-detail-more?foodId=${foodId}`
+const isFavorite = ref(false)
 
 const currentFood = ref({})
 // 三大营养功能比视图数据
@@ -24,8 +27,37 @@ const getDetail = async () => {
   const res = await foodGetDetailService(foodId)
   currentFood.value = res.data.data
 }
+// 查询用户是否收藏
+const handleIsUserFavorite = async () => {
+  const res = await foodGetUserFavoriteService(userStore.user.id, foodId)
+  isFavorite.value = res.data.data.isFavorite
+}
+const onClickFavorite = () => {
+  //如果用户已经收藏
+  if (isFavorite.value) {
+    handleUserDeleteFavoriteFood()
+  }
+  //如果用户未收藏
+  else {
+    handleUserAddFavoriteFood()
+  }
+}
+
+// 点击收藏
+const handleUserAddFavoriteFood = async () => {
+  await foodAddUserFavoriteService(userStore.user.id, foodId)
+  isFavorite.value = true
+}
+// 点击取消收藏
+const handleUserDeleteFavoriteFood = async () => {
+  await foodDeleteUserFavoriteService(userStore.user.id, foodId)
+  isFavorite.value = false
+}
+// 处理添加收藏与取消收藏
+
 onMounted(() => {
   getDetail()
+  handleIsUserFavorite()
   closeToast(true)
   loading.value = false
 })
@@ -55,14 +87,14 @@ showLoadingToast({
         </van-cell>
         <van-row>
           <!-- 未收藏 -->
-          <van-col span="8" v-if="true">
+          <van-col span="8" v-if="!isFavorite" @click="onClickFavorite">
             <div class="icon-box">
               <van-icon name="star-o" size="22" />
               <div class="font-under-icon">收藏</div>
             </div>
           </van-col>
           <!-- 已收藏 -->
-          <van-col span="8" v-else>
+          <van-col span="8" v-else @click="onClickFavorite">
             <div class="icon-box liked">
               <van-icon name="star" color="#ff976a" size="22" />
               <div class="font-under-icon">已收藏</div>

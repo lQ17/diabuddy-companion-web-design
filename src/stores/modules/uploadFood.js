@@ -1,25 +1,30 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 //存到session中了
 export const useUploadFoodStore = defineStore(
   'diabuddy-upload-food',
   () => {
     // 表单数据，初始化为空字符串或默认值
     const foodName = ref('')
-    const foodCategory = ref('')
+    const foodCategoryStr = ref('')
+    const foodCategory = computed(() => {
+      return foodCategoryStr.value.split(' : ')[0] || '' // 拆解并获取左侧字符，如果没有则默认为空字符串
+    })
+
+    const foodTinyCategory = computed(() => {
+      return foodCategoryStr.value.split(' : ')[1] || '' // 拆解并获取右侧字符，如果没有则默认为空字符串
+    })
     const isPublicFood = ref(false)
     const isPackedFood = ref(false)
     const weightValue = ref(100)
     const brandName = ref('')
     const energyUnit = ref('1')
-    const energyValue = ref()
-    const carbValue = ref()
-    const proteinValue = ref()
-    const fatValue = ref()
-    const sodiumValue = ref()
-    const uploadFoodPhotoValue = ref()
-    const uploadNutritionPhotoValue = ref()
-    const uploadIngredientPhotoValue = ref()
+    const energy = ref()
+    const carb = ref()
+    const protein = ref()
+    const fat = ref()
+    const sodium = ref()
+    const foodPic = ref([[], [], []])
     //细节
     const glycemicIndex = ref()
     const glycemicLoad = ref()
@@ -51,20 +56,20 @@ export const useUploadFoodStore = defineStore(
     const totalFattyAcids = ref()
 
     const state = {
-      uploadFoodPhotoValue,
-      uploadNutritionPhotoValue,
-      uploadIngredientPhotoValue,
+      foodPic,
       foodName,
+      foodCategoryStr,
       foodCategory,
+      foodTinyCategory,
       brandName,
       isPublicFood,
       isPackedFood,
       energyUnit,
-      energyValue,
-      carbValue,
-      proteinValue,
-      fatValue,
-      sodiumValue,
+      energy,
+      carb,
+      protein,
+      fat,
+      sodium,
       weightValue,
       glycemicIndex,
       glycemicLoad,
@@ -102,24 +107,26 @@ export const useUploadFoodStore = defineStore(
       }
     }
     const resetData = () => {
-      // const arr = Object.keys(state)
       Object.keys(state).forEach((key) => {
         if (key === 'energyUnit') {
           state[key].value = '1'
-        }
-        if (key === 'weightValue') {
+        } else if (key === 'weightValue') {
           state[key].value = 100
-        }
-        if (key === 'isPublicFood' || key === 'isPackedFood') {
+        } else if (key === 'isPublicFood' || key === 'isPackedFood') {
           state[key].value = false
-        }
-        if (key === 'foodName' || key === 'foodName' || key === 'foodCategory') {
+        } else if (key === 'foodName' || key === 'foodCategoryStr') {
           state[key].value = ''
+        } else if (key === 'foodPic') {
+          state[key].value = [[], [], []]
+        } else if (key === 'foodCategory' || key === 'foodTinyCategory') {
+          return
+        } else {
+          state[key].value = null
         }
-        state[key].value = null
       })
       sessionStorage.removeItem('diabuddy-upload-food')
     }
+
     // 把属性和方法暴露出去
     return {
       ...state,

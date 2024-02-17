@@ -23,3 +23,33 @@ export const foodGetDetailService = (foodId) => {
 export const foodGetTotalDetailService = (foodId) => {
   return request.get(`/food/total-detail/${foodId}`)
 }
+
+//获取用户收藏的食物列表
+export const foodGetUserFavoriteListService = (userId) => {
+  return request.get(`/food/favorite-list/${userId}`)
+}
+
+//查询用户是否收藏该食物
+export const foodGetUserFavoriteService = (userId, foodId) => {
+  return request.get(`/food/favorite/${userId}/${foodId}`)
+}
+
+//用户添加收藏
+export const foodAddUserFavoriteService = (userId, foodId) => {
+  return request.post('/food/favorite', {
+    userId,
+    foodId
+  })
+}
+
+//用户取消收藏
+export const foodDeleteUserFavoriteService = (userId, foodId) => {
+  return request.delete(`/food/favorite/${userId}/${foodId}`)
+}
+
+//用户上传食物
+export const foodUserAddFoodService = (food) => {
+  return request.post('/food/add', {
+    food
+  })
+}
