@@ -11,3 +11,4 @@ export default pinia
 export * from './modules/uploadFood'
 export * from './modules/searchHistory'
 export * from './modules/user'
+export * from './modules/carbCalFoodList'

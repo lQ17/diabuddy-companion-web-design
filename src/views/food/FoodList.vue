@@ -9,6 +9,8 @@ const onClickLeft = () => history.back()
 // 地址栏拿到的参数
 const searchValue = ref('')
 searchValue.value = route.query.search || ''
+const isFromCal = ref(false)
+isFromCal.value = route.query.fromCal || false
 
 const onClick = () => {
   router.replace('/foodsearch')
@@ -36,6 +38,15 @@ const onLoad = async () => {
   foodListLoading.value = false
   foodListFinished.value = true
 }
+const clickItem = (food) => {
+  if (isFromCal.value) {
+    // 如果是从 "/utils/carb-fast-calculation"碳水快算 跳转过来的
+    router.replace({ path: '/utils/carb-fast-calculation', query: { foodName: food.foodName, foodCarbPer100: Number(food.carb).toFixed(2) } })
+  } else {
+    // 否则，导航到食物详情页面
+    router.push(`/food-detail?foodId=${food.foodId}`)
+  }
+}
 </script>
 <template>
   <div class="page-container">
@@ -47,7 +58,7 @@ const onLoad = async () => {
         :key="food.foodName"
         :food="food"
         class="van-haptics-feedback"
-        @click="router.push(`/food-detail?foodId=${food.foodId}`)"
+        @click="clickItem(food)"
       ></food-list-item>
     </van-list>
   </div>
