@@ -13,7 +13,7 @@ const userStore = useUserStore()
 // 胰岛素类型
 const insulinType = ref({ text: '', otherText: '' })
 // 胰岛素注射方式
-const injetcionType = ref({ text: '' })
+const injectionType = ref({ text: '' })
 // 大剂量单位
 const bolus = ref()
 // 方波持续时间
@@ -31,23 +31,23 @@ const showIsOtherType = computed(() => {
   }
 })
 const showSelectInjectionType = ref(false)
-const showSelectinjetcionType = ref(false)
+const showSelectinjectionType = ref(false)
 const showBolus = computed(() => {
-  if (injetcionType.value.value === 1 || injetcionType.value.value === 3) {
+  if (injectionType.value.value === 1 || injectionType.value.value === 3) {
     return true
   } else {
     return false
   }
 })
 const showSquareWave = computed(() => {
-  if (injetcionType.value.value === 2 || injetcionType.value.value === 3) {
+  if (injectionType.value.value === 2 || injectionType.value.value === 3) {
     return true
   } else {
     return false
   }
 })
 const showtips = computed(() => {
-  if (injetcionType.value.value === 3) {
+  if (injectionType.value.value === 3) {
     return true
   } else {
     return false
@@ -86,7 +86,7 @@ const formatDateTime = () => {
   currentTime.value = [hours, minutes, seconds]
   currentDate.value = [year, month, date]
 }
-const selectinjetcionTypeActions = [
+const selectinjectionTypeActions = [
   { text: '大剂量', value: 1 },
   { text: '方波', value: 2 },
   { text: '双波', value: 3 }
@@ -98,13 +98,13 @@ const onConfirm = ({ selectedOptions }) => {
   insulinType.value.value = selectedOptions[0].value
 }
 const onConfirmWay = ({ selectedOptions }) => {
-  showSelectinjetcionType.value = false
-  injetcionType.value.text = selectedOptions[0].text
-  injetcionType.value.value = selectedOptions[0].value
+  showSelectinjectionType.value = false
+  injectionType.value.text = selectedOptions[0].text
+  injectionType.value.value = selectedOptions[0].value
 }
 
 const formatedDateTimeToSubmit = computed(() => {
-  return `${currentDate.value[0]}-${currentDate.value[1]}-${currentDate.value[2]} ${currentTime.value[0]}-${currentTime.value[1]}-${currentTime.value[2]}`
+  return `${currentDate.value[0]}-${currentDate.value[1]}-${currentDate.value[2]} ${currentTime.value[0]}:${currentTime.value[1]}:${currentTime.value[2]}`
 })
 
 // 后续改成按用户设定获取
@@ -113,21 +113,20 @@ const formatedDateTimeToSubmit = computed(() => {
 // 胰岛素注射方式没有上次就默认大剂量
 const initInjectionType = async () => {
   const res = await recordCheckUserLastInjetcioService(userStore.user.id)
-  console.log(res.data.data)
-  injetcionType.value.text = res.data.data.lastInjectionType || '大剂量'
-  if (injetcionType.value.text === '大剂量') {
-    injetcionType.value.value = 1
-  } else if (injetcionType.value.text === '方波') {
-    injetcionType.value.value = 2
-  } else if (injetcionType.value.text === '双波') {
-    injetcionType.value.value = 3
+  injectionType.value.text = res.data.data.lastInjectionType || '大剂量'
+  if (injectionType.value.text === '大剂量') {
+    injectionType.value.value = 1
+  } else if (injectionType.value.text === '方波') {
+    injectionType.value.value = 2
+  } else if (injectionType.value.text === '双波') {
+    injectionType.value.value = 3
   }
   insulinType.value.text = res.data.data.lastInsulinType || ''
 }
 
 // 校验表单
 const validateToSubmit = () => {
-  if (injetcionType.value.text === '大剂量') {
+  if (injectionType.value.text === '大剂量') {
     squareWaveRate.value = null
     squareWaveTime.value = null
     if (bolus.value > 0) {
@@ -135,14 +134,14 @@ const validateToSubmit = () => {
     } else {
       return false
     }
-  } else if (injetcionType.value.text === '方波') {
+  } else if (injectionType.value.text === '方波') {
     bolus.value = null
     if (squareWaveRate.value > 0 && squareWaveTime.value > 0) {
       return true
     } else {
       return false
     }
-  } else if (injetcionType.value.text === '双波') {
+  } else if (injectionType.value.text === '双波') {
     if (squareWaveRate.value > 0 && squareWaveTime.value > 0 && bolus.value > 0) {
       return true
     } else {
@@ -184,7 +183,7 @@ const onSubmitAndRecordNext = () => {
 const addRecord = async () => {
   const toAddObj = {
     userId: userStore.user.id,
-    injetcionType: injetcionType.value.text,
+    injectionType: injectionType.value.text,
     insulinType: insulinType.value.text,
     bolus: bolus.value,
     recordTime: formatedDateTimeToSubmit.value,
@@ -192,6 +191,7 @@ const addRecord = async () => {
     squareWaveRate: squareWaveRate.value,
     squareWaveTime: squareWaveTime.value
   }
+  console.log(toAddObj)
   await recordAddInjectionService(toAddObj)
 }
 
@@ -202,7 +202,7 @@ const resetForm = () => {
   squareWaveRate.value = null
   squareWaveTime.value = null
   remark.value = ''
-  injetcionType.value.text = ''
+  injectionType.value.text = ''
   insulinType.value.text = ''
 }
 
@@ -236,14 +236,14 @@ onMounted(() => {
     </div>
     <div class="cell-group">
       <van-cell-group inset>
-        <van-cell is-link @click="showSelectinjetcionType = true" center :value="injetcionType.text">
+        <van-cell is-link @click="showSelectinjectionType = true" center :value="injectionType.text">
           <template #icon><fork theme="outline" size="20" fill="#1989fa" strokeLinecap="square" /></template>
           <template #title>
             <div class="title-in-cell">注射方式</div>
           </template>
         </van-cell>
-        <van-popup v-model:show="showSelectinjetcionType" round position="bottom">
-          <van-picker :columns="selectinjetcionTypeActions" @cancel="showSelectinjetcionType = false" @confirm="onConfirmWay" />
+        <van-popup v-model:show="showSelectinjectionType" round position="bottom">
+          <van-picker :columns="selectinjectionTypeActions" @cancel="showSelectinjectionType = false" @confirm="onConfirmWay" />
         </van-popup>
       </van-cell-group>
     </div>

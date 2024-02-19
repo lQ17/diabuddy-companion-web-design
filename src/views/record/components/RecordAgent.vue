@@ -45,7 +45,7 @@ const formatDateTime = () => {
 }
 
 const formatedDateTimeToSubmit = computed(() => {
-  return `${currentDate.value[0]}-${currentDate.value[1]}-${currentDate.value[2]} ${currentTime.value[0]}-${currentTime.value[1]}-${currentTime.value[2]}`
+  return `${currentDate.value[0]}-${currentDate.value[1]}-${currentDate.value[2]} ${currentTime.value[0]}:${currentTime.value[1]}:${currentTime.value[2]}`
 })
 
 // 自动选择上次的药名和计量

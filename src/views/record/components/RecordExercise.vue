@@ -75,7 +75,7 @@ const onConfirm = ({ selectedOptions }) => {
   exerciseType.value.value = selectedOptions[0].value
 }
 const formatedDateTimeToSubmit = computed(() => {
-  return `${currentDate.value[0]}-${currentDate.value[1]}-${currentDate.value[2]} ${currentTime.value[0]}-${currentTime.value[1]}-${currentTime.value[2]}`
+  return `${currentDate.value[0]}-${currentDate.value[1]}-${currentDate.value[2]} ${currentTime.value[0]}:${currentTime.value[1]}:${currentTime.value[2]}`
 })
 // 如果之前有记录，延续上次的运动
 // 如果没有，让用户自己选

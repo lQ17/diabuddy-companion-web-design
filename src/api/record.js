@@ -1,5 +1,20 @@
 import request from '@/utils/request'
 
+//获取选中类型记录-分页
+export const recordGetList = ({ userId, recordType, page, pageSize, startTime, endTime }) => {
+  const queryParams = new URLSearchParams()
+
+  // 检查并添加非空且非undefined的参数
+  if (userId != null && userId !== '') queryParams.append('userId', userId)
+  if (recordType != null && recordType !== '') queryParams.append('recordType', recordType)
+  if (page != null && page !== '') queryParams.append('page', page)
+  if (pageSize != null && pageSize !== '') queryParams.append('pageSize', pageSize)
+  if (startTime != null && startTime !== '') queryParams.append('startTime', startTime)
+  if (endTime != null && endTime !== '') queryParams.append('endTime', endTime)
+
+  return request.get(`/record/list?${queryParams.toString()}`)
+}
+
 //首页-获取五条记录
 export const recordGetFiveRecordsService = (userId) => {
   return request.get(`/record/get-5-records/${userId}`)
@@ -54,4 +69,9 @@ export const recordCheckUserLastInjetcioService = ({ userId }) => {
 //查询该用户最后一次用药药名
 export const recordCheckUserLastAgentService = ({ userId }) => {
   return request.get(`/record/user-last-agent/${userId}`)
+}
+
+// 按id删除记录
+export const recordDeleteService = (recordId) => {
+  return request.delete(`/record/delete/${recordId}`)
 }
