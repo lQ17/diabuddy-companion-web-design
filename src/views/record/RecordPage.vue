@@ -44,11 +44,11 @@ const onClickOverlay = () => {
       duration="0.2"
     />
     <div class="components-box" v-if="!showSelectRecordTypeSheet">
-      <record-blood-sugar v-if="selectedRecordType === 1"></record-blood-sugar>
-      <record-exercise v-if="selectedRecordType === 2"></record-exercise>
-      <record-injection v-if="selectedRecordType === 3"></record-injection>
-      <record-agent v-if="selectedRecordType === 4"></record-agent>
-      <record-diet v-if="selectedRecordType === 5"></record-diet>
+      <record-blood-sugar v-if="selectedRecordType === 1" @to-next-record="showSelectRecordTypeSheet = true"></record-blood-sugar>
+      <record-exercise v-if="selectedRecordType === 2" @to-next-record="showSelectRecordTypeSheet = true"></record-exercise>
+      <record-injection v-if="selectedRecordType === 3" @to-next-record="showSelectRecordTypeSheet = true"></record-injection>
+      <record-agent v-if="selectedRecordType === 4" @to-next-record="showSelectRecordTypeSheet = true"></record-agent>
+      <record-diet v-if="selectedRecordType === 5" @to-next-record="showSelectRecordTypeSheet = true"></record-diet>
     </div>
   </div>
 </template>

@@ -1,6 +1,12 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { Sport as IconSport, Time as IconTime, HourglassFull as IconHourglassFull } from '@icon-park/vue-next'
+import { Sport, Time as IconTime, HourglassFull as IconHourglassFull } from '@icon-park/vue-next'
+import { recordCheckUserLastExerciseService, recordAddExerciseService } from '@/api/record'
+import { useRouter } from 'vue-router'
+import { showSuccessToast, showToast } from '@/components/vantComponents'
+import { useUserStore } from '@/stores'
+const router = useRouter()
+const userStore = useUserStore()
 const now = new Date()
 const showChangeRecordTime = ref(false)
 const showChangeRecordDate = ref(false)
@@ -33,8 +39,12 @@ const formatDateTime = () => {
   currentDate.value = [year, month, date]
 }
 const showSelectExerciseType = ref(false)
+// 运动类型
 const exerciseType = ref({ text: '' })
+// 持续时间
 const duration = ref()
+const remark = ref('')
+// 可选的运动
 const selectExerciseActions = [
   { text: '散步', value: 1 },
   { text: '快走', value: 2 },
@@ -64,12 +74,63 @@ const onConfirm = ({ selectedOptions }) => {
   exerciseType.value.text = selectedOptions[0].text
   exerciseType.value.value = selectedOptions[0].value
 }
-const initExerciseType = () => {
-  //默认上次选的运动项目
-  //如果之前有远动记录，延续上次的运动
-  //如果没有，默认散步
-  exerciseType.value = { text: '散步', value: 1 }
+const formatedDateTimeToSubmit = computed(() => {
+  return `${currentDate.value[0]}-${currentDate.value[1]}-${currentDate.value[2]} ${currentTime.value[0]}-${currentTime.value[1]}-${currentTime.value[2]}`
+})
+// 如果之前有记录，延续上次的运动
+// 如果没有，让用户自己选
+const initExerciseType = async () => {
+  const res = await recordCheckUserLastExerciseService(userStore.user.id)
+  exerciseType.value.text = res.data.data.lastType || ''
+  duration.value = res.data.data.lastDuration || null
 }
+
+// 提交
+const onSubmit = () => {
+  if (duration.value > 0 && exerciseType.value.text !== '') {
+    addRecord()
+    showSuccessToast('提交成功')
+    resetForm()
+    router.replace('/')
+  } else {
+    showToast('请输入正确的持续时间和运动类型')
+  }
+}
+
+// 派发一个自定义事件
+const emit = defineEmits(['to-next-record'])
+
+// 提交并记录下一条
+const onSubmitAndRecordNext = () => {
+  if (duration.value > 0 && exerciseType.value.text !== '') {
+    addRecord()
+    showSuccessToast('提交成功')
+    resetForm()
+    emit('to-next-record')
+  } else {
+    showToast('请输入正确的持续时间和运动类型')
+  }
+}
+
+// 请求
+const addRecord = async () => {
+  const toAddObj = {
+    userId: userStore.user.id,
+    exerciseType: exerciseType.value.text,
+    duration: duration.value,
+    recordTime: formatedDateTimeToSubmit.value,
+    remark: remark.value
+  }
+  await recordAddExerciseService(toAddObj)
+}
+
+// 重置数据
+const resetForm = () => {
+  formatDateTime()
+  duration.value = null
+  remark.value = ''
+}
+
 onMounted(() => {
   initExerciseType()
   formatDateTime()
@@ -86,7 +147,7 @@ onMounted(() => {
     <div class="cell-group">
       <van-cell-group inset>
         <van-cell is-link @click="showSelectExerciseType = true" center :value="exerciseType.text">
-          <template #icon><icon-sport theme="outline" size="20" fill="#1989fa" strokeLinecap="square" /></template>
+          <template #icon><sport theme="outline" size="20" fill="#1989fa" strokeLinecap="square" /></template>
           <template #title>
             <div class="title-in-cell">运动类型</div>
           </template>
@@ -115,14 +176,34 @@ onMounted(() => {
         </van-cell>
       </van-cell-group>
     </div>
+
+    <div class="cell-group">
+      <van-cell-group inset>
+        <van-field
+          v-model="remark"
+          rows="2"
+          autosize
+          label="备注"
+          type="textarea"
+          maxlength="100"
+          placeholder="说点什么吧，不说也行……"
+          show-word-limit
+        >
+          <template #left-icon>
+            <van-icon name="comment-circle-o" size="23" color="#1989fa" />
+          </template>
+        </van-field>
+      </van-cell-group>
+    </div>
+
     <van-popup v-model:show="showChangeRecordTime" position="bottom" round :style="{ height: '30%' }">
       <van-time-picker v-model="currentTime" title="选择时间" :columns-type="columnsType" @confirm="showChangeRecordTime = false" />
     </van-popup>
     <van-popup v-model:show="showChangeRecordDate" position="bottom" round :style="{ height: '30%' }">
       <van-date-picker v-model="currentDate" title="选择日期" @confirm="(showChangeRecordDate = false), (showChangeRecordTime = true)" />
     </van-popup>
-    <div class="btn-submit"><van-button type="primary" block round plain>提交</van-button></div>
-    <div class="btn-submit"><van-button type="success" block round plain>提交并记录下一条</van-button></div>
+    <div class="btn-submit"><van-button type="primary" block round plain @click="onSubmit()">提交</van-button></div>
+    <div class="btn-submit"><van-button type="success" block round plain @click="onSubmitAndRecordNext()">提交并记录下一条</van-button></div>
   </div>
 </template>
 <style scoped>

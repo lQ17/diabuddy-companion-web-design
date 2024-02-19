@@ -34,7 +34,8 @@ const selectInjectionActions = [
   { text: '预混赖脯胰岛素25(优泌乐25)', value: 33 },
   { text: '预混赖脯胰岛素25(速秀霖25)', value: 34 },
   { text: '预混赖脯胰岛素50(优泌乐50)', value: 35 },
-  { text: '甘精胰岛素(优乐灵)', value: 36 }
+  { text: '甘精胰岛素(优乐灵)', value: 36 },
+  { text: '其他(可自己输入)', value: 37 }
 ]
 
 export default selectInjectionActions

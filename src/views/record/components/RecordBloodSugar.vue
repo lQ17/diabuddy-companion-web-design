@@ -2,6 +2,12 @@
 import { ref, onMounted, computed } from 'vue'
 import { WaterLevel as IconWaterLevel, Time as IconTime, SpeedOne as IconSpeedOne } from '@icon-park/vue-next'
 import changeMeasureActions from './MeasureActions'
+import { recordAddBloodSugarService } from '@/api/record'
+import { useUserStore } from '@/stores'
+import { useRouter } from 'vue-router'
+import { showSuccessToast, showToast } from '@/components/vantComponents'
+const router = useRouter()
+const userStore = useUserStore()
 const now = new Date()
 const showChangeRecordTime = ref(false)
 const showChangeRecordDate = ref(false)
@@ -41,6 +47,8 @@ const formatDateTime = () => {
   currentTime.value = [hours, minutes, seconds]
   currentDate.value = [year, month, date]
 }
+
+// 根据设备时间自动选择测量节点
 const initMeasureTime = () => {
   const hour = parseInt(currentTime.value[0])
   const min = parseInt(currentTime.value[1])
@@ -110,7 +118,58 @@ onMounted(() => {
   formatDateTime()
   initMeasureTime()
 })
+
 const bloodSugar = ref()
+const remark = ref('')
+const formatedDateTimeToSubmit = computed(() => {
+  return `${currentDate.value[0]}-${currentDate.value[1]}-${currentDate.value[2]} ${currentTime.value[0]}-${currentTime.value[1]}-${currentTime.value[2]}`
+})
+
+// 提交
+const onSubmit = () => {
+  if (bloodSugar.value > 0) {
+    addRecord()
+    showSuccessToast('提交成功')
+    resetForm()
+    router.replace('/')
+  } else {
+    showToast('请输入正确的血糖值')
+  }
+}
+
+// 派发一个自定义事件
+const emit = defineEmits(['to-next-record'])
+
+// 提交并记录下一条
+const onSubmitAndRecordNext = () => {
+  if (bloodSugar.value > 0) {
+    addRecord()
+    showSuccessToast('提交成功')
+    resetForm()
+    emit('to-next-record')
+  } else {
+    showToast('请输入正确的血糖值')
+  }
+}
+
+// 请求方法
+const addRecord = async () => {
+  const toAddObj = {
+    userId: userStore.user.id,
+    bloodSugarValue: bloodSugar.value,
+    measureTime: measureTime.value.value,
+    recordTime: formatedDateTimeToSubmit.value,
+    remark: remark.value
+  }
+  await recordAddBloodSugarService(toAddObj)
+}
+
+// 重置数据
+const resetForm = () => {
+  formatDateTime()
+  bloodSugar.value = null
+  remark.value = ''
+}
 </script>
 <template>
   <div class="components-container">
@@ -151,6 +210,24 @@ const bloodSugar = ref()
         </van-cell>
       </van-cell-group>
     </div>
+    <div class="cell-group">
+      <van-cell-group inset>
+        <van-field
+          v-model="remark"
+          rows="2"
+          autosize
+          label="备注"
+          type="textarea"
+          maxlength="100"
+          placeholder="说点什么吧，不说也行……"
+          show-word-limit
+        >
+          <template #left-icon>
+            <van-icon name="comment-circle-o" size="23" color="#1989fa" />
+          </template>
+        </van-field>
+      </van-cell-group>
+    </div>
 
     <van-popup v-model:show="showChangeRecordTime" position="bottom" round :style="{ height: '30%' }">
       <van-time-picker v-model="currentTime" title="选择时间" :columns-type="columnsType" @confirm="showChangeRecordTime = false" />
@@ -158,8 +235,8 @@ const bloodSugar = ref()
     <van-popup v-model:show="showChangeRecordDate" position="bottom" round :style="{ height: '30%' }">
       <van-date-picker v-model="currentDate" title="选择日期" @confirm="(showChangeRecordDate = false), (showChangeRecordTime = true)" />
     </van-popup>
-    <div class="btn-submit"><van-button type="primary" block round plain>提交</van-button></div>
-    <div class="btn-submit"><van-button type="success" block round plain>提交并记录下一条</van-button></div>
+    <div class="btn-submit"><van-button type="primary" block round plain @click="onSubmit()">提交</van-button></div>
+    <div class="btn-submit"><van-button type="success" block round plain @click="onSubmitAndRecordNext()">提交并记录下一条</van-button></div>
   </div>
 </template>
 

@@ -13,6 +13,7 @@ import {
 import { onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
+import { recordGetFiveRecordsService } from '@/api/record'
 const userStore = useUserStore()
 const router = useRouter()
 
@@ -22,10 +23,76 @@ const toRecordSth = () => {
 const toSetDiaInfo = () => {
   router.push('/set-dia-info')
 }
+
 const userPic = ref('')
+
+//初始化记录list
+const userRecordList = ref([])
+
+//获取五条最近的数据
+const getHomePageRecord = async () => {
+  const res = await recordGetFiveRecordsService(userStore.user.id)
+  userRecordList.value = res.data.data.recordList
+}
+
 onMounted(() => {
   userPic.value = userStore.user.userPic
+  getHomePageRecord()
 })
+
+// 根据记录类型返回对应的标签文本
+const tagText = (type) => {
+  switch (type) {
+    case 'blood_sugar':
+      return '血糖'
+    case 'diet':
+      return '饮食'
+    case 'injection':
+      return '注射'
+    case 'exercise':
+      return '运动'
+    case 'agent':
+      return '用药'
+    default:
+      return ''
+  }
+}
+
+// 根据记录类型返回对应的标签颜色
+const tagColor = (type) => {
+  switch (type) {
+    case 'blood_sugar':
+      return '#ffe1e1'
+    case 'diet':
+      return '#ffeea1'
+    case 'injection':
+      return '#cbe3ff'
+    case 'exercise':
+      return '#cfffd4'
+    case 'agent':
+      return '#eed0ff'
+    default:
+      return ''
+  }
+}
+
+// 根据记录类型返回对应的文字颜色
+const tagTextColor = (type) => {
+  switch (type) {
+    case 'blood_sugar':
+      return '#ad0000'
+    case 'diet':
+      return '#ff7500'
+    case 'injection':
+      return '#0077ff'
+    case 'exercise':
+      return '#009a0f'
+    case 'agent':
+      return '#56004f'
+    default:
+      return ''
+  }
+}
 </script>
 <template>
   <div class="page-container">
@@ -134,36 +201,20 @@ onMounted(() => {
         <!-- 最近的5条记录 -->
         <van-row>
           <van-cell-group class="main-cell-group">
-            <van-cell class="reset-cell-height" title-style="flex: 50%;" value="5.7">
+            <van-cell
+              class="reset-cell-height"
+              title-style="flex: 50%;"
+              :value="record.mainValue"
+              v-for="record in userRecordList"
+              :key="record.recordId"
+            >
               <template #title>
                 <div class="custom-title">
-                  <van-tag color="#ffe1e1" text-color="#ad0000" class="custom-title">血糖</van-tag>
-                  <span class="span-title"> | 空腹</span>
+                  <van-tag :color="tagColor(record.recordType)" :text-color="tagTextColor(record.recordType)" class="custom-title">{{
+                    tagText(record.recordType)
+                  }}</van-tag>
+                  <span class="span-title"> | {{ record.mainKey }}</span>
                 </div>
-              </template>
-            </van-cell>
-            <van-cell class="reset-cell-height" title-style="flex: 50%;" value="30分钟">
-              <template #title>
-                <van-tag color="#cfffd4" text-color="#009a0f" class="custom-title">运动</van-tag>
-                <span class="span-title"> | 跑步</span>
-              </template>
-            </van-cell>
-            <van-cell class="reset-cell-height" title-style="flex: 50%;" value="5U">
-              <template #title>
-                <van-tag color="#cbe3ff" text-color="#0077ff" class="custom-title">注射</van-tag>
-                <span class="span-title"> | 胰岛素</span>
-              </template>
-            </van-cell>
-            <van-cell class="reset-cell-height" title-style="flex: 50%;" value="1片">
-              <template #title>
-                <van-tag color="#cca4e3" text-color="#56004f" class="custom-title">用药</van-tag>
-                <span class="span-title"> | 二甲双胍85mg</span>
-              </template>
-            </van-cell>
-            <van-cell class="reset-cell-height" title-style="flex: 30%;" value="碳水:45克">
-              <template #title>
-                <van-tag color="#ffeea1" text-color="#ff7500" class="custom-title">饮食</van-tag>
-                <span class="span-title"> | 早餐</span>
               </template>
             </van-cell>
           </van-cell-group>
