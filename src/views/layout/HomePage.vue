@@ -207,6 +207,7 @@ const tagTextColor = (type) => {
               :value="record.mainValue"
               v-for="record in userRecordList"
               :key="record.recordId"
+              @click="router.push(`/check-record/detail?recordRootId=${record.recordId}`)"
             >
               <template #title>
                 <div class="custom-title">

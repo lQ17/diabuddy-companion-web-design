@@ -109,7 +109,7 @@ const userAddFood = async () => {
         <van-cell-group inset>
           <van-field name="uploader" input-align="right" label="上传图片">
             <template #input>
-              <van-uploader v-model="uploadFoodStore.foodPic[0]" :max-count="1" preview-size="40" />
+              <van-uploader v-model="uploadFoodStore.foodPic[0]" :max-count="1" preview-size="40" :max-size="1920 * 1080" />
             </template>
           </van-field>
         </van-cell-group>

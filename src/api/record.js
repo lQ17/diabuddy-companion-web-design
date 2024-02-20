@@ -20,6 +20,11 @@ export const recordGetFiveRecordsService = (userId) => {
   return request.get(`/record/get-5-records/${userId}`)
 }
 
+//根据recordRootId获得一条记录
+export const recordGetDetailService = (recordRootId) => {
+  return request.get(`/record/detail/${recordRootId}`)
+}
+
 //添加血糖记录
 export const recordAddBloodSugarService = ({ userId, bloodSugarValue, measureTime, recordTime, remark }) => {
   return request.post('/record/blood-sugar', { userId, bloodSugarValue, measureTime, recordTime, remark })
@@ -71,7 +76,97 @@ export const recordCheckUserLastAgentService = ({ userId }) => {
   return request.get(`/record/user-last-agent/${userId}`)
 }
 
-// 按id删除记录
-export const recordDeleteService = (recordId) => {
-  return request.delete(`/record/delete/${recordId}`)
+// 按recordRootId删除记录
+export const recordDeleteService = (recordRootId) => {
+  return request.delete(`/record/delete/${recordRootId}`)
+}
+
+// 修改用药记录
+export const recordUpdateAgentService = ({ id, userId, dosage, agentName, recordTime, remark }) => {
+  const data = {
+    userId,
+    dosage,
+    agentName,
+    recordTime,
+    remark
+  }
+  return request.put(`/record/agent/${id}`, data)
+}
+
+// 修改血糖记录
+export const recordUpdateBloodSugarService = ({ id, userId, bloodSugarValue, measureTime, recordTime, remark }) => {
+  const data = {
+    userId,
+    bloodSugarValue,
+    measureTime,
+    recordTime,
+    remark
+  }
+  return request.put(`/record/blood-sugar/${id}`, data)
+}
+
+// 修改饮食记录
+export const recordUpdateDietService = ({
+  id,
+  userId,
+  foodDetail,
+  foodPic,
+  mealType,
+  totalCarb,
+  totalFat,
+  totalEnergy,
+  totalProtein,
+  recordTime,
+  remark
+}) => {
+  const data = {
+    userId,
+    foodDetail,
+    foodPic,
+    mealType,
+    totalCarb,
+    totalFat,
+    totalEnergy,
+    totalProtein,
+    recordTime,
+    remark
+  }
+  return request.put(`/record/diet/${id}`, data)
+}
+
+// 修改运动记录
+export const recordUpdateExerciseService = ({ id, userId, exerciseType, duration, recordTime, remark }) => {
+  const data = {
+    userId,
+    exerciseType,
+    duration,
+    recordTime,
+    remark
+  }
+  return request.put(`/record/exercise/${id}`, data)
+}
+
+// 修改注射记录
+export const recordUpdateInjectionService = ({
+  id,
+  userId,
+  injectionType,
+  insulinType,
+  bolus,
+  squareWaveRate,
+  squareWaveTime,
+  recordTime,
+  remark
+}) => {
+  const data = {
+    userId,
+    injectionType,
+    insulinType,
+    bolus,
+    squareWaveRate,
+    squareWaveTime,
+    recordTime,
+    remark
+  }
+  return request.put(`/record/injection/${id}`, data)
 }

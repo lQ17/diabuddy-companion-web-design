@@ -2,7 +2,9 @@
 import { ref, computed } from 'vue'
 import { recordGetList, recordDeleteService } from '@/api/record'
 import { useUserStore } from '@/stores'
+import { useRouter } from 'vue-router'
 import { showConfirmDialog } from '@/components/vantComponents'
+const router = useRouter()
 const userStore = useUserStore()
 const onClickLeft = () => history.back()
 
@@ -145,18 +147,13 @@ const onDelete = async (item, index) => {
   })
     .then(async () => {
       list.value.splice(index, 1)
-      await recordDeleteService(item.recordId)
+      await recordDeleteService(item.recordRootId)
     })
     .catch(() => {})
 }
-const onEdit = (item) => {
-  console.log(item)
-  //直接跳转回编辑页面
-}
 
 const onCheckRecordDetail = (item) => {
-  console.log(item)
-  //根据item.recordId查一次
+  router.push(`/check-record/detail?recordRootId=${item.recordRootId}`)
 }
 </script>
 
@@ -249,7 +246,6 @@ const onCheckRecordDetail = (item) => {
               </template>
             </van-cell>
             <template #right>
-              <van-button class="right-btn" square type="primary" text="编辑" @click="onEdit(item)" />
               <van-button class="right-btn" square type="danger" text="删除" @click="onDelete(item, index)" />
             </template>
           </van-swipe-cell>
