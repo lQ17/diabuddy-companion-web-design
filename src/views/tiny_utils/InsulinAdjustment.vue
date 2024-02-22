@@ -1,6 +1,13 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores'
+import { recordGetUserTodayLastBloodSugar } from '@/api/record'
+const userStore = useUserStore()
+const initLastTodayBloodSugar = async () => {
+  const res = await recordGetUserTodayLastBloodSugar(userStore.user.id)
+  bloodSugarValue.value = res.data.data.bloodSugar * 10 || 85
+}
 const router = useRouter()
 const onClickLeft = () => history.back()
 const themeVars = reactive({
@@ -10,13 +17,17 @@ const themeVars = reactive({
 })
 // 滑块组件是整数，所以bloodSugarValue为血糖值的十倍
 // 5.5mmol/L = 55
-const bloodSugarValue = ref(61)
-const targetBloodSugarValue = ref(60)
+const bloodSugarValue = ref(85)
+const targetBloodSugarValue = ref(78)
 // 用户胰岛素敏感系数 （十倍）
 const userISF = ref(30)
 //纠正计量
 const correctDose = computed(() => {
   return ((bloodSugarValue.value - targetBloodSugarValue.value) / userISF.value).toFixed(3)
+})
+
+onMounted(() => {
+  initLastTodayBloodSugar()
 })
 </script>
 

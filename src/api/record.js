@@ -25,6 +25,11 @@ export const recordGetDetailService = (recordRootId) => {
   return request.get(`/record/detail/${recordRootId}`)
 }
 
+//获取该用户今天最后一次血糖值
+export const recordGetUserTodayLastBloodSugar = (userId) => {
+  return request.get(`/record/user-today-last-blood-sugar/${userId}`)
+}
+
 //添加血糖记录
 export const recordAddBloodSugarService = ({ userId, bloodSugarValue, measureTime, recordTime, remark }) => {
   return request.post('/record/blood-sugar', { userId, bloodSugarValue, measureTime, recordTime, remark })
