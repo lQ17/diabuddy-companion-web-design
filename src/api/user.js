@@ -56,7 +56,7 @@ export const userGetEamilMsgService = (email) => {
   })
 }
 
-// 获取用户基本信息
+// 获取用户信息
 export const userGetInfoService = () => {
   return request.get('/user/info')
 }

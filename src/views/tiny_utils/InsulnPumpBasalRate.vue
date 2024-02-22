@@ -1,6 +1,22 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { planUserAddPumpBasalRateService } from '@/api/plan'
+import { useUserStore } from '@/stores'
+import { showSuccessToast } from '@/components/vantComponents'
+const userStore = useUserStore()
+const onAdd = async () => {
+  await planUserAddPumpBasalRateService(
+    userStore.user.id,
+    BasalArrResult.value[0], // 对应 00:00 - 02:30
+    BasalArrResult.value[1], // 对应 03:00 - 08:30
+    BasalArrResult.value[2], // 对应 09:00 - 11:30
+    BasalArrResult.value[3], // 对应 12:00 - 15:30
+    BasalArrResult.value[4], // 对应 16:00 - 19:30
+    BasalArrResult.value[5] // 对应 20:00 - 23:30
+  )
+  showSuccessToast('保存成功')
+}
 const router = useRouter()
 const onClickLeft = () => history.back()
 const showHowToCompute = ref(false)
@@ -117,7 +133,7 @@ const BasalArrResult = computed(() => {
           <p>&nbsp;</p>
         </div>
         <div></div>
-        <van-button type="primary" block round>保存至我的参数</van-button>
+        <van-button type="primary" block round @click="onAdd()">保存至我的参数</van-button>
       </div>
       <van-row>
         <van-col span="7"></van-col>

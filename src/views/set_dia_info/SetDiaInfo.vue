@@ -1,14 +1,23 @@
 <script setup>
 import selectInjectionActions from '@/components/InjectionActions'
 import { ref, onMounted, computed } from 'vue'
+import { useUserStore } from '@/stores'
+import { showSuccessToast } from '@/components/vantComponents'
+const userStore = useUserStore()
 const onClickLeft = () => history.back()
 const onClickRight = () => {
-  console.log('已保存')
+  if (isCheckMode.value) {
+    isCheckMode.value = false
+  } else {
+    isCheckMode.value = true
+    showSuccessToast('已保存')
+  }
 }
-const userTDD = ref(30)
-const userICR = ref(15)
-const userISF = ref(3)
-const userTotalCal = ref(2000)
+const isCheckMode = ref(true)
+const userTDD = ref()
+const userICR = ref()
+const userISF = ref()
+const userTotalEnergy = ref(2000)
 const userTotalCarb = ref(125)
 const userTotalProtein = ref(50)
 const userTotalFat = ref(30)
@@ -19,6 +28,7 @@ const userInsulinTypeAboutBasal = ref({ text: '' })
 const userInsulinTypeAboutPremixed = ref({ text: '' })
 const userMedicationName = ref()
 const userMedicationDosage = ref()
+const remark = ref('')
 // 三餐注射方式
 const breakfastInjectionWay = ref({ text: '' })
 const lunchInjectionWay = ref({ text: '' })
@@ -201,32 +211,42 @@ const onConfirmInsulinTypeAboutPremixed = ({ selectedOptions }) => {
 
 const showSelectTreatmentPlan = ref(false)
 const selectTreatmentPlanActions = [
-  { text: '胰岛素泵', value: 1 },
-  { text: '餐前＋基础', value: 2 },
-  { text: '预混', value: 3 },
-  { text: '降糖药物治疗', value: 4 },
-  { text: '饮食运动', value: 5 }
+  { text: '胰岛素泵', enText: 'plan_insulin_pump', value: 1 },
+  { text: '餐前＋基础', enText: 'plan_pre_meal_and_basal', value: 2 },
+  { text: '预混', enText: 'plan_premixed', value: 3 },
+  { text: '降糖药物治疗', enText: 'plan_medication', value: 4 },
+  { text: '饮食运动', enText: 'plan_diet_and_exercise', value: 5 }
 ]
 const onConfirm = ({ selectedOptions }) => {
   showSelectTreatmentPlan.value = false
   userTreatmentPlan.value.text = selectedOptions[0].text
   userTreatmentPlan.value.value = selectedOptions[0].value
 }
-onMounted(() => {})
+
+// 初始化控糖参数
+const initUserCtrlData = () => {
+  userTDD.value = userStore.user.tdd
+  userICR.value = userStore.user.icr
+  userISF.value = userStore.user.isf
+  userTotalEnergy.value = userStore.user.dayEatingEnergy
+  userTotalCarb.value = userStore.user.dayEatingCarb
+  userTotalProtein.value = userStore.user.dayEatingProtein
+  userTotalFat.value = userStore.user.dayEatingFat
+}
+
+onMounted(() => {
+  initUserCtrlData()
+})
 </script>
 
 <template>
   <div class="page-container">
-    <van-nav-bar
-      title="基础率设置"
-      left-text="返回"
-      right-text="保存"
-      left-arrow
-      @click-left="onClickLeft"
-      @click-right="onClickRight"
-      fixed
-      placeholder
-    />
+    <van-nav-bar title="控糖方案" left-text="返回" left-arrow @click-left="onClickLeft" @click-right="onClickRight" fixed placeholder>
+      <template #right>
+        <div class="set-color" v-if="isCheckMode">编辑</div>
+        <div class="set-color" v-else>保存</div>
+      </template>
+    </van-nav-bar>
     <div class="warning-box">
       <div class="warning-font-box">个性化的控糖参数可以帮助我们更科学地控制血糖。 未计算过控糖参数的糖友请先计算控糖参数。</div>
     </div>
@@ -238,49 +258,49 @@ onMounted(() => {})
     <div id="sugar-control-parameters">
       <div class="cell-group">
         <van-cell-group inset>
-          <van-field v-model="userTDD" type="number" label="TDD" input-align="right">
+          <van-field v-model="userTDD" type="number" label="TDD" input-align="right" :readonly="isCheckMode">
             <template #right-icon> U</template>
           </van-field>
         </van-cell-group>
       </div>
       <div class="cell-group">
         <van-cell-group inset>
-          <van-field v-model="userICR" type="number" label="ICR" input-align="right">
+          <van-field v-model="userICR" type="number" label="ICR" input-align="right" :readonly="isCheckMode">
             <template #right-icon> 克/U</template>
           </van-field>
         </van-cell-group>
       </div>
       <div class="cell-group">
         <van-cell-group inset>
-          <van-field v-model="userISF" type="number" label="ISF" input-align="right">
+          <van-field v-model="userISF" type="number" label="ISF" input-align="right" :readonly="isCheckMode">
             <template #right-icon> mmol/U</template>
           </van-field>
         </van-cell-group>
       </div>
       <div class="cell-group">
         <van-cell-group inset>
-          <van-field v-model="userTotalCal" type="number" label="总摄入能量" input-align="right">
+          <van-field v-model="userTotalEnergy" type="number" label="总摄入能量" input-align="right" :readonly="isCheckMode">
             <template #right-icon> kJ</template>
           </van-field>
         </van-cell-group>
       </div>
       <div class="cell-group">
         <van-cell-group inset>
-          <van-field v-model="userTotalCarb" type="number" label="总摄入碳水" input-align="right">
+          <van-field v-model="userTotalCarb" type="number" label="总摄入碳水" input-align="right" :readonly="isCheckMode">
             <template #right-icon> 克</template>
           </van-field>
         </van-cell-group>
       </div>
       <div class="cell-group">
         <van-cell-group inset>
-          <van-field v-model="userTotalProtein" type="number" label="总摄入蛋白质" input-align="right">
+          <van-field v-model="userTotalProtein" type="number" label="总摄入蛋白质" input-align="right" :readonly="isCheckMode">
             <template #right-icon> 克</template>
           </van-field>
         </van-cell-group>
       </div>
       <div class="cell-group">
         <van-cell-group inset>
-          <van-field v-model="userTotalFat" type="number" label="总摄入脂肪" input-align="right">
+          <van-field v-model="userTotalFat" type="number" label="总摄入脂肪" input-align="right" :readonly="isCheckMode">
             <template #right-icon> 克</template>
           </van-field>
         </van-cell-group>
@@ -575,14 +595,35 @@ onMounted(() => {})
       <!-- 不用胰岛素 -->
       <div class="diet" v-if="showNoInsulinWarning">
         <div class="warning-box">
-          <div class="warning-font-box">*极度不推荐处于蜜月期的一型糖友停止注射外源胰岛素。严重者会导致酮症酸中毒，危及生命！</div>
+          <div class="warning-font-box">*不推荐处于蜜月期的一型糖友停止注射外源胰岛素。严重者会导致酮症酸中毒，危及生命！</div>
         </div>
+      </div>
+      <div class="cell-group last-box">
+        <van-cell-group inset>
+          <van-field
+            v-model="remark"
+            rows="2"
+            autosize
+            label="备注"
+            type="textarea"
+            maxlength="100"
+            placeholder="说点什么吧，不说也行……"
+            show-word-limit
+          >
+          </van-field>
+        </van-cell-group>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.last-box {
+  margin-bottom: 15px;
+}
+.set-color {
+  color: #1989fa;
+}
 .set-field-width {
   --van-field-label-width: 120px;
 }

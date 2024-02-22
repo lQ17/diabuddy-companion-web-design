@@ -2,15 +2,38 @@
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { ref, computed } from 'vue'
+import { useUserStore } from '@/stores'
+import { showSuccessToast } from '@/components/vantComponents'
+import { planUserAddDayEatingService, planUserUpdateDayEatingService } from '@/api/plan'
+const userStore = useUserStore()
+
+const onAdd = async () => {
+  const dayEatingEnergy = parseFloat(requiredKalorie.value)
+  const dayEatingCarb = parseFloat(carbWeight.value)
+  const dayEatingProtein = parseFloat(proteinWeight.value)
+  const dayEatingFat = parseFloat(fatWeight.value)
+
+  if (userStore.user.dayEatingEnergy) {
+    await planUserUpdateDayEatingService(userStore.user.id, dayEatingEnergy, dayEatingCarb, dayEatingProtein, dayEatingFat)
+    showSuccessToast('更新成功')
+  } else {
+    await planUserAddDayEatingService(userStore.user.id, dayEatingEnergy, dayEatingCarb, dayEatingProtein, dayEatingFat)
+    showSuccessToast('新增成功')
+  }
+  userStore.user.dayEatingEnergy = dayEatingEnergy
+  userStore.user.dayEatingCarb = dayEatingCarb
+  userStore.user.dayEatingProtein = dayEatingProtein
+  userStore.user.dayEatingFat = dayEatingFat
+}
 const isShowResult = ref(false)
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
+const showAddBtn = ref(false)
 const showHowToComfirmPercent = ref(false)
+const showHowToCompute = ref(false)
 const showPicker = ref(false)
 const onClickLeft = () => history.back()
 const sliderValue = ref([50, 70])
 const inputAge = ref()
-const age = ref(-1)
+const age = ref()
 const height = ref()
 const weight = ref()
 const columns = [
@@ -234,24 +257,28 @@ const submitToShow = () => {
     })
   }
   isShowResult.value = true
+  showAddBtn.value = true
 }
 </script>
 <template>
   <div class="page-container">
     <van-nav-bar title="三餐摄入计算" left-text="返回" left-arrow @click-left="onClickLeft" />
     <div class="warning-box">
-      <div class="warning-font-box">计算合理的碳水化合物、脂肪和蛋白质摄入量</div>
+      <div class="warning-font-box">
+        计算合理的碳水化合物、脂肪和蛋白质摄入量
+        <van-icon name="question-o" color="#1989fa" size="20" @click="showHowToCompute = true" />
+      </div>
     </div>
     <van-cell-group inset title="第一步：请输入您的年龄">
       <van-field v-model="inputAge" type="number" placeholder="您的年龄" @blur="handleBlur" />
     </van-cell-group>
-    <van-cell-group inset title="第二步：请输入您的身高" v-if="age >= 18 || age === -1">
+    <van-cell-group inset title="第二步：请输入您的身高" v-if="age >= 18 || age === undefined">
       <van-field v-model="height" type="number" placeholder="您的身高 (单位：厘米)" />
     </van-cell-group>
-    <van-cell-group inset title="第三步：请输入您的体重" v-if="age >= 18 || age === -1">
+    <van-cell-group inset title="第三步：请输入您的体重" v-if="age >= 18 || age === undefined">
       <van-field v-model="weight" type="number" placeholder="您的体重 (单位：千克)" />
     </van-cell-group>
-    <van-cell-group inset title="第四步：请输入您的日常活动强度" v-if="age >= 18 || age === -1">
+    <van-cell-group inset title="第四步：请输入您的日常活动强度" v-if="age >= 18 || age === undefined">
       <van-field v-model="fieldValue" is-link readonly label="活动强度" placeholder="选择活动强度" @click="showPicker = true" />
     </van-cell-group>
     <van-popup v-model:show="showPicker" round position="bottom">
@@ -285,6 +312,61 @@ const submitToShow = () => {
             &nbsp; &nbsp;
             &nbsp;推荐肾功能正常的糖尿病患者蛋白质摄入宜占总能量的15%~20%，T1DM儿童和青少年推荐蛋白质供能比可增加至25%~35%，老年糖尿病患者蛋白摄入量可酌情增加至每日1.0~1.2
             g/kg。
+          </div>
+        </template>
+      </van-popup>
+    </div>
+
+    <!-- 解释计算公式 -->
+    <div class="showHbA1c">
+      <van-popup v-model:show="showHowToCompute" round :style="{ padding: '40px' }">
+        <template #default>
+          <div class="showHowToComfirmPercentTitle">计算公式</div>
+          <div class="showHowToComfirmPercentDetail">
+            <ul>
+              <li>
+                <strong>儿童的卡路里需求（18岁以下）：</strong>
+                <ul>
+                  <li>0-3岁：基础需求为1000卡路里，之后每增加1岁，加100卡路里。</li>
+                  <li>3-6岁：基础需求为1000卡路里，之后每增加1岁，加90卡路里。</li>
+                  <li>7-10岁：基础需求为1000卡路里，之后每增加1岁，加80卡路里。</li>
+                  <li>10岁以上：基础需求为1000卡路里，之后每增加1岁，加70卡路里。</li>
+                </ul>
+              </li>
+              <li>
+                <strong>成人的卡路里需求（根据BMI和工作强度）：</strong>
+                <ul>
+                  <li>
+                    BMI &lt; 18.5（过轻）：
+                    <ul>
+                      <li>轻度活动：每公斤体重需要25卡。</li>
+                      <li>中度活动：每公斤体重需要35卡。</li>
+                      <li>重度活动：每公斤体重需要40卡。</li>
+                      <li>非常重的活动：每公斤体重需要45卡。</li>
+                    </ul>
+                  </li>
+                  <li>
+                    BMI 18.5-23.9（正常）：
+                    <ul>
+                      <li>轻度活动：每公斤体重需要20卡。</li>
+                      <li>中度活动：每公斤体重需要30卡。</li>
+                      <li>重度活动：每公斤体重需要35卡。</li>
+                      <li>非常重的活动：每公斤体重需要40卡。</li>
+                    </ul>
+                  </li>
+                  <li>
+                    BMI ≥ 24（超重）：
+                    <ul>
+                      <li>轻度活动：每公斤体重需要15卡。</li>
+                      <li>中度活动：每公斤体重需要25卡。</li>
+                      <li>重度活动：每公斤体重需要30卡。</li>
+                      <li>非常重的活动：每公斤体重需要35卡。</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>如果一个人的情况不符合上述任何一类，那么默认的日常所需能量为2000卡路里。</li>
+            </ul>
           </div>
         </template>
       </van-popup>
@@ -335,14 +417,21 @@ const submitToShow = () => {
         </van-col>
       </van-row>
     </div>
+    <div id="add-btn">
+      <van-button type="primary" block round @click="onAdd()" v-if="showAddBtn">保存至我的参数</van-button>
+    </div>
     <div class="foot-box">
-      <div class="foot-msg">*饮食不存在好与坏，但极度不推荐生酮饮食</div>
       <div class="foot-msg">*饮食要遵循个性化，本软件只提供参考</div>
       <div class="foot-msg">*计算公式来源：中国1型糖尿病诊治指南（2021版）</div>
     </div>
   </div>
 </template>
 <style scoped>
+#add-btn {
+  margin-top: 10px;
+  padding-left: 14px;
+  padding-right: 14px;
+}
 .foot-box {
   padding-top: 20px;
 }

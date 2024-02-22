@@ -1,5 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { planUserAddTDDService, planUserUpdateTDDService } from '@/api/plan'
+import { useUserStore } from '@/stores'
+import { showSuccessToast } from '@/components/vantComponents'
+const userStore = useUserStore()
+
 const totalDay = ref()
 const totalUsage = ref()
 const age = ref()
@@ -17,6 +22,18 @@ const TDDResult = computed(() => {
     return ((totalUsage.value / totalDay.value + 0.44 * weight.value) * 0.45).toFixed(2)
   } else return 0
 })
+
+const onAdd = async () => {
+  if (userStore.user.tdd) {
+    await planUserUpdateTDDService(userStore.user.id, TDDResult.value)
+    userStore.user.tdd = parseFloat(TDDResult.value)
+    showSuccessToast('更新成功')
+  } else {
+    await planUserAddTDDService(userStore.user.id, TDDResult.value)
+    userStore.user.tdd = parseFloat(TDDResult.value)
+    showSuccessToast('新增成功')
+  }
+}
 </script>
 <template>
   <div class="page-container">
@@ -35,7 +52,7 @@ const TDDResult = computed(() => {
     <div class="compute-btn">
       <div class="result-box" v-if="TDDResult > 0.01">
         <div class="result-value-box">您的每日胰岛素总量(TDD)为：{{ TDDResult }}U/天</div>
-        <van-button type="primary" block round>保存至我的参数</van-button>
+        <van-button type="primary" block round @click="onAdd()">保存至我的参数</van-button>
       </div>
       <van-row>
         <van-col span="7"></van-col>

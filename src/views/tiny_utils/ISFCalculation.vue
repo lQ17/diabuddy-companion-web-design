@@ -2,7 +2,11 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import ISFTable from '@/assets/pic/ISFTable.png'
+import { useUserStore } from '@/stores'
+import { showSuccessToast } from '@/components/vantComponents'
+import { planUserAddISFService, planUserUpdateISFService } from '@/api/plan'
 const router = useRouter()
+const userStore = useUserStore()
 const onClickLeft = () => history.back()
 const showHowToCompute = ref(false)
 const showHbA1c = ref(false)
@@ -20,6 +24,18 @@ const factorInCompute = computed(() => {
 const ISFResult = computed(() => {
   return (factorInCompute.value / userTDD.value).toFixed(2)
 })
+
+const onAdd = async () => {
+  if (userStore.user.isf) {
+    await planUserUpdateISFService(userStore.user.id, ISFResult.value)
+    userStore.user.isf = parseFloat(ISFResult.value)
+    showSuccessToast('更新成功')
+  } else {
+    await planUserAddISFService(userStore.user.id, ISFResult.value)
+    userStore.user.isf = parseFloat(ISFResult.value)
+    showSuccessToast('新增成功')
+  }
+}
 </script>
 <template>
   <div class="page-container">
@@ -56,7 +72,7 @@ const ISFResult = computed(() => {
     <div class="compute-btn">
       <div class="result-box" v-if="ISFResult > 0.01">
         <div class="result-value-box">您的胰岛素敏感系数(ISF)为：{{ ISFResult }}mmol/U</div>
-        <van-button type="primary" block round>保存至我的参数</van-button>
+        <van-button type="primary" block round @click="onAdd()">保存至我的参数</van-button>
       </div>
       <van-row>
         <van-col span="7"></van-col>

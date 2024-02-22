@@ -1,6 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores'
+import { planUserAddICRService, planUserUpdateICRService } from '@/api/plan'
+import { showSuccessToast } from '@/components/vantComponents'
+const userStore = useUserStore()
 const router = useRouter()
 const onClickLeft = () => history.back()
 const showHowToCompute = ref(false)
@@ -17,6 +21,18 @@ const ICRResult = computed(() => {
     return 0
   }
 })
+
+const onAdd = async () => {
+  if (userStore.user.icr) {
+    await planUserUpdateICRService(userStore.user.id, ICRResult.value)
+    userStore.user.icr = parseFloat(ICRResult.value)
+    showSuccessToast('更新成功')
+  } else {
+    await planUserAddICRService(userStore.user.id, ICRResult.value)
+    userStore.user.icr = parseFloat(ICRResult.value)
+    showSuccessToast('新增成功')
+  }
+}
 </script>
 <template>
   <div class="page-container">
@@ -35,7 +51,7 @@ const ICRResult = computed(() => {
       <div class="result-box" v-if="ICRResult > 0.01">
         <div class="result-value-box">您的碳水化合物系数(ICR)为：{{ ICRResult }}g/U</div>
         <div></div>
-        <van-button type="primary" block round>保存至我的参数</van-button>
+        <van-button type="primary" block round @click="onAdd()">保存至我的参数</van-button>
       </div>
       <van-row>
         <van-col span="7"></van-col>
