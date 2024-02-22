@@ -116,9 +116,9 @@ const onSearch = () => {
 
 const isFinishedGetValueFromRoute = ref(false)
 
-const onRecord = () => {
+const addCurrentDietRecord = () => {
   //直接通过Store去记录,记录完成后，清除Store的foodList
-  console.log('直接通过Store去记录')
+  router.push('/record?isFromCarbCal=true')
 }
 
 onMounted(() => {
@@ -263,7 +263,7 @@ onMounted(() => {
       <div id="tip-box">*左滑删除指定项，右上角图标清除所有</div>
       <van-button type="primary" block @click="showSelectWay = true">添加食物</van-button>
       <div class="update-box">
-        <van-button type="success" block @click="onRecord">同步到饮食记录</van-button>
+        <van-button type="success" block @click="addCurrentDietRecord()">同步到饮食记录</van-button>
       </div>
     </div>
   </div>

@@ -5,9 +5,17 @@ import RecordExercise from './components/RecordExercise.vue'
 import RecordInjection from './components/RecordInjection.vue'
 import RecordAgent from './components/RecordAgent.vue'
 import RecordDiet from './components/RecordDiet.vue'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
+const route = useRoute()
+const isFromCarbCal = computed(() => {
+  if (route.query.isFromCarbCal) {
+    return true
+  } else {
+    return false
+  }
+})
 const onClickLeft = () => history.back()
 const showSelectRecordTypeSheet = ref(true)
 const recordType = [
@@ -28,6 +36,14 @@ const onClickOverlay = () => {
   selectedRecordType.value = 1
   showToast('已默认选择记录血糖')
 }
+
+onMounted(() => {
+  // 初始化从碳水快算过来的数据
+  if (isFromCarbCal.value) {
+    showSelectRecordTypeSheet.value = false
+    selectedRecordType.value = 5
+  }
+})
 </script>
 <template>
   <div class="page-container">
@@ -48,7 +64,7 @@ const onClickOverlay = () => {
       <record-exercise v-if="selectedRecordType === 2" @to-next-record="showSelectRecordTypeSheet = true"></record-exercise>
       <record-injection v-if="selectedRecordType === 3" @to-next-record="showSelectRecordTypeSheet = true"></record-injection>
       <record-agent v-if="selectedRecordType === 4" @to-next-record="showSelectRecordTypeSheet = true"></record-agent>
-      <record-diet v-if="selectedRecordType === 5" @to-next-record="showSelectRecordTypeSheet = true"></record-diet>
+      <record-diet v-if="selectedRecordType === 5" @to-next-record="showSelectRecordTypeSheet = true" :isFromCarbCal="isFromCarbCal"></record-diet>
     </div>
   </div>
 </template>

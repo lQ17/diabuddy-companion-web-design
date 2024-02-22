@@ -5,6 +5,14 @@ import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
 import { showToast, showSuccessToast } from '@/components/vantComponents'
 import { recordAddDietService } from '@/api/record'
+import { useCarbCalFoodListStore } from '@/stores'
+const carbCalFoodListStore = useCarbCalFoodListStore()
+const props = defineProps({
+  isFromCarbCal: {
+    type: Boolean,
+    default: () => false
+  }
+})
 const router = useRouter()
 const userStore = useUserStore()
 // 显示控制
@@ -151,11 +159,31 @@ const resetForm = () => {
   formatDateTime()
   remark.value = ''
   food.value = { foodDetail: '', foodPic: [], totalCarb: null, totalFat: null, totalProtein: null, totalEnergy: null }
+
+  // 清除碳水快算的list
+  if (props.isFromCarbCal) {
+    carbCalFoodListStore.resetFoodList()
+  }
+}
+
+const initCarbCalData = () => {
+  const foodDetail = ref('')
+  carbCalFoodListStore.foodList.forEach((element, index) => {
+    const acc =
+      (index + 1).toString() + ': ' + element.foodName + '[' + element.foodCarbPer100 + '克/100克] ' + ' 吃了' + element.foodWeight + '克。\n'
+    foodDetail.value = foodDetail.value + acc
+  })
+  food.value.foodDetail = foodDetail.value
+  food.value.totalCarb = parseFloat(carbCalFoodListStore.totalCarb)
+  remark.value = '来自碳水快算'
 }
 
 onMounted(() => {
   formatDateTime()
   initDietTime()
+  if (props.isFromCarbCal) {
+    initCarbCalData()
+  }
 })
 </script>
 <template>
