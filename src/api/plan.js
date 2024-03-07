@@ -1,5 +1,63 @@
 import request from '@/utils/request'
 
+//获取用户医疗信息
+export const planUserMedicalInfo = (userId) => {
+  return request.get(`/user/medical-info/${userId}`)
+}
+
+//修改用户所有数据(改没改都重新覆盖一遍)
+export const planUserUpdateMedicalInfo = (data) => {
+  const {
+    userId,
+    tdd,
+    icr,
+    isf,
+    dayEatingEnergy,
+    dayEatingCarb,
+    dayEatingProtein,
+    dayEatingFat,
+    treatmentOption,
+    remark,
+    insulinPump,
+    preMealAndBasal,
+    premixed,
+    agent
+  } = data
+
+  let treatmentData = {}
+
+  switch (treatmentOption) {
+    case 'plan_insulin_pump':
+      treatmentData.insulinPump = insulinPump
+      break
+    case 'plan_pre_meal_and_basal':
+      treatmentData.preMealAndBasal = preMealAndBasal
+      break
+    case 'plan_premixed':
+      treatmentData.premixed = premixed
+      break
+    default:
+      break
+  }
+
+  const payload = {
+    userId,
+    tdd,
+    icr,
+    isf,
+    dayEatingEnergy,
+    dayEatingCarb,
+    dayEatingProtein,
+    dayEatingFat,
+    treatmentOption,
+    remark,
+    ...treatmentData,
+    agent
+  }
+
+  return request.post('/user/medical-info', payload)
+}
+
 //用户添加TDD
 export const planUserAddTDDService = (userId, tdd) => {
   return request.post('/plan/tdd', {
