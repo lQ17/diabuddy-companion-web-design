@@ -556,7 +556,7 @@ onMounted(() => {
         </div>
         <div class="cell-group">
           <van-cell-group inset>
-            <van-cell title="基础率" :is-link="!isCheckMode" to="/set-pump-basal-rate">
+            <van-cell title="基础率" is-link to="/set-pump-basal-rate">
               <template #value> {{ userTotalBasalInsulin }} U </template>
             </van-cell>
           </van-cell-group>

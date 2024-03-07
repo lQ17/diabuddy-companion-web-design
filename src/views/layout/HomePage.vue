@@ -173,7 +173,7 @@ const tagTextColor = (type) => {
           </van-col>
           <!-- 4 -->
           <van-col class="main-row-1-div main-row-2-div update-userInfo-quick-button-bottom col-4">
-            <van-button size="small" type="default" round hairline class="col-4" @click="toSetDiaInfo">改方案</van-button>
+            <van-button size="small" type="default" round hairline class="col-4" @click="toSetDiaInfo">看方案</van-button>
           </van-col>
           <!-- 5 -->
           <van-col class="main-row-1-div main-row-2-div add-records-bottom col-5">
@@ -331,9 +331,7 @@ const tagTextColor = (type) => {
 .col-4,
 .col-6 {
   /* color: #00cfff; */
-  font-size: 13px;
-  font-weight: bold;
-  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.5);
+  font-size: 12px;
 }
 
 .add-records-button {

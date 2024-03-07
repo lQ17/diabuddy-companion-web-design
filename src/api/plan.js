@@ -182,3 +182,66 @@ export const planUserAddPumpBasalRateService = (userId, v0, v1, v2, v3, v4, v5) 
     rate2330: v5
   })
 }
+
+//获取用户胰岛素分段
+export const planUserCheckPumpBasalRateService = (userId) => {
+  return request.get(`/plan/pump-basal-rate-manual/${userId}`)
+}
+
+//用户更新胰岛素分段
+/**
+ {
+  userId,
+  rate0000,
+  rate0030,
+  rate0100,
+  rate0130,
+  rate0200,
+  rate0230,
+  rate0300,
+  rate0330,
+  rate0400,
+  rate0430,
+  rate0500,
+  rate0530,
+  rate0600,
+  rate0630,
+  rate0700,
+  rate0730,
+  rate0800,
+  rate0830,
+  rate0900,
+  rate0930,
+  rate1000,
+  rate1030,
+  rate1100,
+  rate1130,
+  rate1200,
+  rate1230,
+  rate1300,
+  rate1330,
+  rate1400,
+  rate1430,
+  rate1500,
+  rate1530,
+  rate1600,
+  rate1630,
+  rate1700,
+  rate1730,
+  rate1800,
+  rate1830,
+  rate1900,
+  rate1930,
+  rate2000,
+  rate2030,
+  rate2100,
+  rate2130,
+  rate2200,
+  rate2230,
+  rate2300,
+  rate2330
+}
+ */
+export const planUserAddPumpBasalRateManualService = (data) => {
+  return request.post('/plan/pump-basal-rate-manual', data)
+}
