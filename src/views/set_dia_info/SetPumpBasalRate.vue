@@ -2,11 +2,15 @@
 import { ref, onMounted } from 'vue'
 import { showConfirmDialog } from '@/components/vantComponents'
 import { planUserCheckPumpBasalRateService, planUserAddPumpBasalRateManualService } from '@/api/plan'
-import { showSuccessToast } from '@/components/vantComponents'
+import { showSuccessToast, showFailToast } from '@/components/vantComponents'
 import { useUserStore } from '@/stores'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const checkId = route.query.checkId
 const userStore = useUserStore()
 const onClickLeft = () => {
-  if (!isSaved.value) {
+  // 未保存，并且是本人
+  if (!isSaved.value && checkId == userStore.user.id) {
     showConfirmDialog({
       title: '您还没保存，确认退出吗？'
     })
@@ -17,15 +21,22 @@ const onClickLeft = () => {
       .catch(() => {
         // on cancel
       })
+  } else {
+    history.back()
   }
 }
 
 const isSaved = ref(false)
 
 const onClickRight = async () => {
-  isSaved.value = true
-  await planUserAddPumpBasalRateManualService(updateDataWithRates())
-  showSuccessToast('已保存')
+  // 判断是否是用户本人
+  if (checkId == userStore.user.id) {
+    isSaved.value = true
+    await planUserAddPumpBasalRateManualService(updateDataWithRates())
+    showSuccessToast('已保存')
+  } else {
+    showFailToast('非本人禁止修改')
+  }
 }
 
 const updateDataWithRates = () => {
@@ -153,7 +164,7 @@ const pumpBasalRate = ref([
 
 const init = async () => {
   try {
-    const res = await planUserCheckPumpBasalRateService(userStore.user.id)
+    const res = await planUserCheckPumpBasalRateService(checkId)
     const data = res.data.data
 
     pumpBasalRate.value.forEach((item) => {
