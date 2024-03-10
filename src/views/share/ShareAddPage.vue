@@ -1,34 +1,69 @@
 <script setup>
 // import { useRouter } from 'vue-router'
-import { ref } from 'vue'
-import { showSuccessToast } from '@/components/vantComponents'
+import { useUserStore } from '@/stores'
+import { ref, onMounted } from 'vue'
+import { showConfirmDialog, showSuccessToast, showFailToast } from '@/components/vantComponents'
+import { shareSearchUserService, shareAddFriendService } from '@/api/share'
 // const router = useRouter()
-const usernameOrPhone = ref('')
+const userStore = useUserStore()
+const userPhone = ref('')
 const onClickLeft = () => history.back()
-const shareList = [
-  { sharerName: 'napnap', sharerPhoneHide: '138****1418', sharerRealName: '杨*祥' },
-  { sharerName: 'kik kik', sharerPhoneHide: '135****6953', sharerRealName: '王*明' }
-]
-const handleAdd = () => {
-  showSuccessToast('已发送请求')
+const searchedUser = ref()
+
+const handleAdd = (id) => {
+  showConfirmDialog({
+    title: '确认发送好友申请吗？'
+  })
+    .then(async () => {
+      // on confirm
+      await shareAddFriendService(userStore.user.id, id)
+      showSuccessToast('发送成功')
+    })
+    .catch(() => {
+      // on cancel
+    })
 }
+
+const onSearch = async () => {
+  const res = await shareSearchUserService(userPhone.value)
+  console.log(res.data)
+  if (res.data.code === 1 || res.data.code === '1') {
+    // 查到了
+    searchedUser.value = res.data.data
+  } else {
+    // 没查到
+    showFailToast('没有查到该用户')
+  }
+}
+
+const searchInput = ref(null)
+
+onMounted(() => {
+  if (searchInput.value) {
+    searchInput.value.focus()
+  }
+})
 </script>
 
 <template>
   <div class="page-container">
     <van-nav-bar title="添加亲友" left-text="返回" left-arrow @click-left="onClickLeft" placeholder />
-    <van-search v-model="usernameOrPhone" placeholder="请输入亲友的手机号或者用户名" shape="round" />
+    <van-search v-model="userPhone" placeholder="请输入亲友的手机号" shape="round" @search="onSearch" ref="searchInput" />
     <van-list>
-      <div class="cell-group" v-for="(item, index) in shareList" :key="index">
+      <div class="cell-group" v-if="searchedUser">
         <van-cell-group inset>
-          <van-cell center is-link @click="handleAdd">
+          <van-cell center>
             <template #title>
-              <div class="item-value">{{ item.sharerRealName }}</div>
+              <div class="item-value">{{ searchedUser.fullName }}</div>
             </template>
             <template #label>
-              {{ item.sharerName }}
+              {{ searchedUser.username }}
             </template>
-            <template #value>{{ item.sharerPhoneHide }}</template>
+            <template #value>
+              <van-space>
+                <van-button type="primary" size="small" plain @click="handleAdd(searchedUser.id)">发送申请</van-button>
+              </van-space>
+            </template>
           </van-cell>
         </van-cell-group>
       </div>

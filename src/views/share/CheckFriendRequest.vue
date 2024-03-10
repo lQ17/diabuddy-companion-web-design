@@ -1,18 +1,45 @@
 <script setup>
 // import { useRouter } from 'vue-router'
-// import { ref } from 'vue'
+import { useUserStore } from '@/stores'
+import { ref, onMounted } from 'vue'
+import { showSuccessToast } from '@/components/vantComponents'
 // const router = useRouter()
+import { shareGetWaitListService, shareUpdateShareRequestService } from '@/api/share'
 const onClickLeft = () => history.back()
-const requestList = [
-  { requestName: 'napnap', requestPhoneHide: '138****1418', requestRealName: '杨*祥' },
-  { requestName: 'kik kik', requestPhoneHide: '135****6953', requestRealName: '王*明' }
-]
-const onAdd = (phone) => {
-  console.log(phone + 'add')
+const userStore = useUserStore()
+const requestList = ref([])
+
+/**  { requestName: 'napnap', requestPhoneHide: '138****1418', requestRealName: '杨*祥',id:11 },
+  { requestName: 'kik kik', requestPhoneHide: '135****6953', requestRealName: '王*明',id:112 } */
+
+// 同意
+const onAdd = async (id) => {
+  await shareUpdateShareRequestService(userStore.user.id, id, 'agree')
+  const index = requestList.value.findIndex((item) => item.id === id)
+  if (index !== -1) {
+    requestList.value.splice(index, 1)
+  }
+  showSuccessToast('操作成功')
 }
-const onCancel = (phone) => {
-  console.log(phone + 'cancel')
+
+// 拒绝
+const onCancel = async (id) => {
+  await shareUpdateShareRequestService(userStore.user.id, id, 'refuse')
+  const index = requestList.value.findIndex((item) => item.id === id)
+  if (index !== -1) {
+    requestList.value.splice(index, 1)
+  }
+  showSuccessToast('操作成功')
 }
+
+const initList = async () => {
+  const res = await shareGetWaitListService(userStore.user.id)
+  requestList.value = res.data.data.list
+}
+
+onMounted(() => {
+  initList()
+})
 </script>
 
 <template>
@@ -23,15 +50,15 @@ const onCancel = (phone) => {
         <van-cell-group inset>
           <van-cell center>
             <template #title>
-              <div class="item-value">{{ item.requestRealName }}</div>
+              <div class="item-value">{{ item.fullName }}</div>
             </template>
             <template #label>
-              {{ item.requestPhoneHide }}
+              {{ item.phone }}
             </template>
             <template #value>
               <van-space>
-                <van-button type="primary" size="small" plain @click="onAdd(item.requestPhoneHide)">同意</van-button>
-                <van-button type="danger" size="small" plain @click="onCancel(item.requestPhoneHide)">忽略</van-button>
+                <van-button type="primary" size="small" plain @click="onAdd(item.id)">同意</van-button>
+                <van-button type="danger" size="small" plain @click="onCancel(item.id)">拒绝</van-button>
               </van-space>
             </template>
           </van-cell>

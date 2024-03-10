@@ -167,7 +167,13 @@ const tagTextColor = (type) => {
           </van-col>
           <!-- 3. 历史记录 -->
           <van-col class="main-row-1-div check-records col-3">
-            <van-button round type="primary" color="#00cfff" class="check-records-button" @click="router.push('/check-record')">
+            <van-button
+              round
+              type="primary"
+              color="#00cfff"
+              class="check-records-button"
+              @click="router.push(`/check-record?id=${userStore.user.id}`)"
+            >
               <van-icon name="todo-list-o" class="right-icon" />
             </van-button>
           </van-col>
@@ -190,7 +196,9 @@ const tagTextColor = (type) => {
           </van-col>
           <!-- 6 -->
           <van-col class="main-row-1-div main-row-2-div check-records-bottom col-6">
-            <van-button size="small" type="default" round hairline class="col-4" @click="router.push('/check-record')">查记录</van-button>
+            <van-button size="small" type="default" round hairline class="col-4" @click="router.push(`/check-record?id=${userStore.user.id}`)">
+              查记录
+            </van-button>
           </van-col>
         </van-row>
         <van-row class="divider-row">

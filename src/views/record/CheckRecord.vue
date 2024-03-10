@@ -1,10 +1,13 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { recordGetList, recordDeleteService } from '@/api/record'
 import { useUserStore } from '@/stores'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { showConfirmDialog } from '@/components/vantComponents'
 const router = useRouter()
+const route = useRoute()
+const id = route.query.id
+const username = route.query.username
 const userStore = useUserStore()
 const onClickLeft = () => history.back()
 
@@ -107,7 +110,7 @@ const onLoad = async () => {
 
   try {
     const submitObj = {
-      userId: userStore.user.id,
+      userId: id,
       recordType: selectedModel.value,
       page: page.value,
       pageSize: pageSize,
@@ -155,11 +158,23 @@ const onDelete = async (item, index) => {
 const onCheckRecordDetail = (item) => {
   router.push(`/check-record/detail?recordRootId=${item.recordRootId}`)
 }
+
+const pageTitle = ref('我的所有记录')
+
+onMounted(() => {
+  if (id != userStore.user.id) {
+    if (username) {
+      pageTitle.value = username + '的所有记录'
+    } else {
+      pageTitle.value = 'TA的所有记录'
+    }
+  }
+})
 </script>
 
 <template>
   <div class="page-container">
-    <van-nav-bar title="所有记录" left-text="返回" left-arrow @click-left="onClickLeft" fixed placeholder />
+    <van-nav-bar :title="pageTitle" left-text="返回" left-arrow @click-left="onClickLeft" fixed placeholder />
     <van-dropdown-menu>
       <van-dropdown-item v-model="selectedModel" :options="modelOption" @change="changeParams" />
       <van-dropdown-item v-model="selectedTime" :options="timeOption" @change="changeParams" />
