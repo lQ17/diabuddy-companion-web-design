@@ -14,6 +14,7 @@ import { onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
 import { recordGetFiveRecordsService } from '@/api/record'
+import { showFailToast } from '@/components/vantComponents'
 const userStore = useUserStore()
 const router = useRouter()
 
@@ -36,8 +37,13 @@ const getHomePageRecord = async () => {
 }
 
 onMounted(() => {
-  userPic.value = userStore.user.userPic
-  getHomePageRecord()
+  if (!userStore.token) {
+    router.replace('/login')
+    showFailToast('请先登录')
+  } else {
+    userPic.value = userStore.user.userPic
+    getHomePageRecord()
+  }
 })
 
 // 根据记录类型返回对应的标签文本

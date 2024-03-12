@@ -80,6 +80,8 @@ const onLogin = () => {
 const loginByPassword = async () => {
   const res = await userLoginByPasswordService(emailOrPhone.value, password.value)
   userStore.setToken(res.data.data.token)
+  userStore.setUserId(res.data.data.userId)
+  console.log(userStore.user.id)
   showSuccessToast('登录成功')
   replaceToHome()
 }
@@ -87,6 +89,7 @@ const loginByPassword = async () => {
 const loginBySms = async () => {
   const res = await userLoginBySmsService(phone.value, sms.value)
   userStore.setToken(res.data.data.token)
+  userStore.setUserId(res.data.data.userId)
   showSuccessToast('登录成功')
   replaceToHome()
 }

@@ -20,6 +20,21 @@ const user = ref({
 })
 onMounted(() => {
   user.value = { ...userStore.user }
+
+  // 获取当前日期
+  const currentDate = new Date()
+
+  // 获取用户帐户创建日期
+  const accountCreationDate = new Date(user.value.accountCreationDate)
+
+  // 计算日期差（以毫秒为单位）
+  const timeDiff = currentDate.getTime() - accountCreationDate.getTime()
+
+  // 将毫秒数转换为天数
+  const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24))
+
+  // 现在daysDiff变量中存储了天数差
+  user.value.existDay = daysDiff
 })
 </script>
 <template>

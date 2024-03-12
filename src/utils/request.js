@@ -5,7 +5,8 @@ import { showFailToast } from 'vant'
 import 'vant/es/toast/style'
 import _ from 'lodash'
 
-const baseURL = 'http://127.0.0.1:4523/m1/3928753-0-default'
+// const baseURL = 'http://127.0.0.1:4523/m1/3928753-0-default'
+const baseURL = 'http://localhost:8080'
 
 const instance = axios.create({
   baseURL,

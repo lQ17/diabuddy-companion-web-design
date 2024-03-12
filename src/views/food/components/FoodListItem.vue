@@ -10,18 +10,18 @@ const props = defineProps({
 const energyText = computed(() => {
   // 确保 food.energy 是一个数字
   const energy = parseFloat(props.food.energy)
-  return `热量 ${energy.toFixed(2)}千卡 /100克`
+  return `热量 ${energy.toFixed(0)}千卡 /100克`
 })
 
-const energyKeywords = computed(() => [`${props.food.energy.toFixed(2)}`, `千卡`, `热量`])
+const energyKeywords = computed(() => [`${parseFloat(props.food.energy).toFixed(0)}`, `千卡`, `热量`])
 
 const carbText = computed(() => {
   // 确保 food.carb 是一个数字
   const carb = parseFloat(props.food.carb)
-  return `碳水 ${carb.toFixed(2)}克 /100克`
+  return `碳水 ${carb.toFixed(0)}克 /100克`
 })
 
-const carbKeywords = computed(() => [`${props.food.carb.toFixed(2)}`, `碳水`, `克 `])
+const carbKeywords = computed(() => [`${parseFloat(props.food.carb).toFixed(0)}`, `碳水`, `克 `])
 </script>
 <template>
   <div class="food-list-item">

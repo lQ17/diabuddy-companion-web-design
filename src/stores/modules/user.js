@@ -18,11 +18,14 @@ export const useUserStore = defineStore(
     const user = ref({})
 
     const getUser = async () => {
-      const res = await userGetInfoService()
+      const res = await userGetInfoService(user.value.id)
       user.value = res.data.data
     }
     const setUser = (obj) => {
       user.value = obj
+    }
+    const setUserId = (id) => {
+      user.value.id = id
     }
 
     return {
@@ -31,7 +34,8 @@ export const useUserStore = defineStore(
       setToken,
       removeToken,
       getUser,
-      setUser
+      setUser,
+      setUserId
     }
   },
   {

@@ -1,7 +1,10 @@
 import request from '@/utils/request'
+import CryptoJS from 'crypto-js'
 
 // 邮箱注册接口
-export const userRegisterByEmailService = (email, password, repassword, emailMsg) => {
+export const userRegisterByEmailService = (email, passwordNoMD5, repasswordNoMD5, emailMsg) => {
+  const password = CryptoJS.MD5(passwordNoMD5).toString()
+  const repassword = CryptoJS.MD5(repasswordNoMD5).toString()
   return request.post('/user/register-by-email', {
     email,
     password,
@@ -11,7 +14,9 @@ export const userRegisterByEmailService = (email, password, repassword, emailMsg
 }
 
 // 手机号注册接口
-export const userRegisterByPhoneService = (phone, password, repassword) => {
+export const userRegisterByPhoneService = (phone, passwordNoMD5, repasswordNoMD5) => {
+  const password = CryptoJS.MD5(passwordNoMD5).toString()
+  const repassword = CryptoJS.MD5(repasswordNoMD5).toString()
   return request.post('/user/register-by-phone', {
     phone,
     password,
@@ -20,15 +25,18 @@ export const userRegisterByPhoneService = (phone, password, repassword) => {
 }
 
 // 密码登录接口
-export const userLoginByPasswordService = (EmailOrPhone, password) => {
+export const userLoginByPasswordService = (EmailOrPhone, passwordNoMD5) => {
+  const password = CryptoJS.MD5(passwordNoMD5).toString()
   if (EmailOrPhone.includes('@') && EmailOrPhone.includes('.')) {
+    const email = EmailOrPhone
     return request.post('/user/login-by-email-password', {
-      EmailOrPhone,
+      email,
       password
     })
   } else {
+    const phone = EmailOrPhone
     return request.post('/user/login-by-phone-password', {
-      EmailOrPhone,
+      phone,
       password
     })
   }
@@ -57,6 +65,6 @@ export const userGetEamilMsgService = (email) => {
 }
 
 // 获取用户信息
-export const userGetInfoService = () => {
-  return request.get('/user/info')
+export const userGetInfoService = (userId) => {
+  return request.get(`/user/info?userId=${userId}`)
 }
