@@ -9,7 +9,7 @@ const onClickLeft = () => history.back()
 const foodId = route.query.foodId
 const currentFood = ref({})
 const getFoodTotalDetail = async () => {
-  const res = await foodGetTotalDetailService()
+  const res = await foodGetTotalDetailService(foodId)
   currentFood.value = res.data.data
   console.log(currentFood.value)
 }
@@ -20,7 +20,7 @@ onMounted(() => {
 <template>
   <div class="page-container">
     <!-- 再根据id查一次数据库，拿到完整数据 -->
-    <van-nav-bar :left-text="currentFood.foodName || '返回'" :title="foodId" left-arrow @click-left="onClickLeft" placeholder />
+    <van-nav-bar left-text="返回" :title="currentFood.foodName" left-arrow @click-left="onClickLeft" placeholder />
 
     <div class="cell-group">
       <van-cell-group inset>

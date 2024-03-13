@@ -66,6 +66,6 @@ watch(activeSidebar, () => {
   /* overflow-y: auto; */
 
   overflow: auto; /* 添加滚动条 */
-  min-height: 100vh; /* 设定最大高度为视窗高度，确保内容不会溢出屏幕 */
+  max-height: 120vh; /* 设定最大高度为视窗高度，确保内容不会溢出屏幕 */
 }
 </style>

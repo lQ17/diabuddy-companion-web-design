@@ -74,7 +74,7 @@ showLoadingToast({
   <div v-if="loading"></div>
   <div class="page-container" v-else>
     <!-- 再根据id查一次数据库，拿到完整数据 -->
-    <van-nav-bar left-text="返回" :title="foodId" left-arrow @click-left="onClickLeft" placeholder />
+    <van-nav-bar left-text="返回" left-arrow @click-left="onClickLeft" placeholder />
     <div class="cell-group">
       <van-cell-group inset>
         <van-cell center>
@@ -172,14 +172,7 @@ showLoadingToast({
           </van-col>
           <van-col span="8">
             <div class="circle-box">
-              <van-circle
-                :current-rate="proteinCurrentRate"
-                :rate="proteinCurrentRate"
-                :stroke-width="60"
-                size="80px"
-                color="#f2ba4e"
-                layer-color="#ebedf0"
-              >
+              <van-circle :current-rate="fatCurrentRate" :rate="fatCurrentRate" :stroke-width="60" size="80px" color="#f2ba4e" layer-color="#ebedf0">
                 <template #default>
                   <div class="circle-inner-box">
                     <div class="circle-font-box">脂肪</div>
@@ -191,7 +184,14 @@ showLoadingToast({
           </van-col>
           <van-col span="8">
             <div class="circle-box">
-              <van-circle :current-rate="fatCurrentRate" :rate="fatCurrentRate" :stroke-width="60" size="80px" color="#f04d51" layer-color="#ebedf0">
+              <van-circle
+                :current-rate="proteinCurrentRate"
+                :rate="proteinCurrentRate"
+                :stroke-width="60"
+                size="80px"
+                color="#f04d51"
+                layer-color="#ebedf0"
+              >
                 <template #default>
                   <div class="circle-inner-box">
                     <div class="circle-font-box">蛋白质</div>

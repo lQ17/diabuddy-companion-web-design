@@ -59,9 +59,7 @@ export const userGetSmsService = (phone) => {
 
 // 获取邮箱验证码接口
 export const userGetEamilMsgService = (email) => {
-  return request.post('/user/get-email-msg', {
-    email
-  })
+  return request.get(`/email/send?email=${email}`)
 }
 
 // 获取用户信息

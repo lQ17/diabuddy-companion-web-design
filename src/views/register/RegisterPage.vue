@@ -51,7 +51,7 @@ const repasswordRules = [
 
 const codeRules = [
   { required: true, message: '请输入验证码', trigger: 'onSubmit' },
-  { pattern: /^\d{4}$/, message: '验证码为4位数字', trigger: 'onSubmit' }
+  { pattern: /^[a-zA-Z0-9]{6}$/, message: '验证码为6位数字或字母', trigger: 'onSubmit' }
 ]
 
 // 获取sms验证码
