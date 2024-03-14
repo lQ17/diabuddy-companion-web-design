@@ -1,5 +1,15 @@
 import request from '@/utils/request'
 
+const formatDateToISO = (dateString) => {
+  // 假设dateString的格式是"yyyy-MM-dd HH:mm:ss"
+  // 将日期字符串转换为Date对象
+  const parts = dateString.match(/(\d+)/g)
+  let date = new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5])
+
+  // 转换为ISO 8601格式的字符串
+  return date.toISOString()
+}
+
 //获取选中类型记录-分页
 export const recordGetList = ({ userId, recordType, page, pageSize, startTime, endTime }) => {
   const queryParams = new URLSearchParams()
@@ -32,21 +42,25 @@ export const recordGetUserTodayLastBloodSugar = (userId) => {
 
 //添加血糖记录
 export const recordAddBloodSugarService = ({ userId, bloodSugarValue, measureTime, recordTime, remark }) => {
+  recordTime = formatDateToISO(recordTime)
   return request.post('/record/blood-sugar', { userId, bloodSugarValue, measureTime, recordTime, remark })
 }
 
 //添加运动记录
 export const recordAddExerciseService = ({ userId, exerciseType, duration, recordTime, remark }) => {
+  recordTime = formatDateToISO(recordTime)
   return request.post('/record/exercise', { userId, exerciseType, duration, recordTime, remark })
 }
 
 //添加注射记录
 export const recordAddInjectionService = ({ userId, injectionType, insulinType, bolus, recordTime, remark, squareWaveRate, squareWaveTime }) => {
+  recordTime = formatDateToISO(recordTime)
   return request.post('/record/injection', { userId, injectionType, insulinType, bolus, recordTime, remark, squareWaveRate, squareWaveTime })
 }
 
 //添加用药记录
 export const recordAddAgentService = ({ userId, agentName, dosage, recordTime, remark }) => {
+  recordTime = formatDateToISO(recordTime)
   return request.post('/record/agent', { userId, agentName, dosage, recordTime, remark })
 }
 
@@ -63,6 +77,7 @@ export const recordAddDietService = ({
   recordTime,
   remark
 }) => {
+  recordTime = formatDateToISO(recordTime)
   return request.post('/record/diet', { userId, foodDetail, foodPic, mealType, totalCarb, totalProtein, totalFat, totalEnergy, recordTime, remark })
 }
 
@@ -88,6 +103,7 @@ export const recordDeleteService = (recordRootId) => {
 
 // 修改用药记录
 export const recordUpdateAgentService = ({ id, userId, dosage, agentName, recordTime, remark }) => {
+  recordTime = formatDateToISO(recordTime)
   const data = {
     userId,
     dosage,
@@ -100,6 +116,7 @@ export const recordUpdateAgentService = ({ id, userId, dosage, agentName, record
 
 // 修改血糖记录
 export const recordUpdateBloodSugarService = ({ id, userId, bloodSugarValue, measureTime, recordTime, remark }) => {
+  recordTime = formatDateToISO(recordTime)
   const data = {
     userId,
     bloodSugarValue,
@@ -124,6 +141,7 @@ export const recordUpdateDietService = ({
   recordTime,
   remark
 }) => {
+  recordTime = formatDateToISO(recordTime)
   const data = {
     userId,
     foodDetail,
@@ -141,6 +159,7 @@ export const recordUpdateDietService = ({
 
 // 修改运动记录
 export const recordUpdateExerciseService = ({ id, userId, exerciseType, duration, recordTime, remark }) => {
+  recordTime = formatDateToISO(recordTime)
   const data = {
     userId,
     exerciseType,
@@ -148,6 +167,7 @@ export const recordUpdateExerciseService = ({ id, userId, exerciseType, duration
     recordTime,
     remark
   }
+
   return request.put(`/record/exercise/${id}`, data)
 }
 
@@ -163,6 +183,7 @@ export const recordUpdateInjectionService = ({
   recordTime,
   remark
 }) => {
+  recordTime = formatDateToISO(recordTime)
   const data = {
     userId,
     injectionType,

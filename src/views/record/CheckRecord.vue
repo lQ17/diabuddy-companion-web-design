@@ -16,7 +16,7 @@ const selectedModel = ref('all')
 const selectedTime = ref('nearlyWeek')
 const modelOption = [
   { text: '全部记录', value: 'all' },
-  { text: '血糖', value: 'bloodSugar' },
+  { text: '血糖', value: 'blood_sugar' },
   { text: '运动', value: 'exercise' },
   { text: '注射', value: 'injection' },
   { text: '用药', value: 'agent' },
@@ -119,9 +119,9 @@ const onLoad = async () => {
     }
 
     const res = await recordGetList(submitObj)
-    const newList = res.data.data.list
+    const newList = res.data.data.records
     list.value = list.value.concat(newList)
-    const totalPages = res.data.data.totalPages
+    const totalPages = res.data.data.pages
 
     // 判断是否全部加载完成
     if (page.value >= totalPages) {
@@ -137,6 +137,62 @@ const onLoad = async () => {
   loading.value = false
 }
 
+// 后端传过来的是英文，转中文
+const showMealType = (mealType) => {
+  switch (mealType) {
+    case 'breakfast':
+      return '早餐'
+    case 'lunch':
+      return '午餐'
+    case 'dinner':
+      return '晚餐'
+    case 'snack':
+      return '加餐'
+    default:
+      return ''
+  }
+}
+
+// 后端传过来的是英文，转中文
+const showMeasureTime = (measureTime) => {
+  switch (measureTime) {
+    case 'early_morning':
+      return '凌晨'
+    case 'fasting':
+      return '空腹'
+    case 'after_breakfast':
+      return '早餐后'
+    case 'before_lunch':
+      return '午餐前'
+    case 'after_lunch':
+      return '午餐后'
+    case 'before_dinner':
+      return '晚餐前'
+    case 'after_dinner':
+      return '晚餐后'
+    case 'before_bed':
+      return '睡前'
+    case 'random':
+      return '随机'
+    default:
+      return ''
+  }
+}
+
+// 后端传过来的日期是ISO格式的，转常见格式
+const formatDateStringFromServer = (dateString) => {
+  const date = new Date(dateString)
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }
+  return new Intl.DateTimeFormat('zh-CN', options).format(date).replace(/\//g, '-').replace(',', '')
+}
 const changeParams = () => {
   list.value = []
   page.value = 1
@@ -185,7 +241,7 @@ onMounted(() => {
           <van-swipe-cell>
             <van-cell center>
               <template #title>
-                <div class="bloodSugar" v-if="item.recordType === 'bloodSugar'">
+                <div class="bloodSugar" v-if="item.recordType === 'blood_sugar'">
                   <van-space>
                     <div class="item-value">{{ item.bloodSugarLevel }}</div>
                     <div>mmol/L</div>
@@ -228,7 +284,7 @@ onMounted(() => {
 
               <!-- 只显示时间 -->
               <template #label>
-                {{ item.recordDate }} {{ item.recordTime }}
+                {{ formatDateStringFromServer(item.recordTime) }}
                 <!-- <div class="bloodSugar" v-if="item.recordType === 'bloodSugar'">{{ item.recordDate }} {{ item.recordTime }}</div>
               <div class="exercise" v-if="item.recordType === 'exercise'">{{ item.recordDate }} {{ item.recordTime }}</div>
               <div class="injection" v-if="item.recordType === 'injection'">{{ item.recordDate }} {{ item.recordTime }}</div>
@@ -238,8 +294,8 @@ onMounted(() => {
 
               <!-- Tag、二级信息（空腹、大剂量……） -->
               <template #value>
-                <div class="bloodSugar" v-if="item.recordType === 'bloodSugar'">
-                  {{ item.measureTime }}
+                <div class="bloodSugar" v-if="item.recordType === 'blood_sugar'">
+                  {{ showMeasureTime(item.measureTime) }}
                   <van-tag color="#ffe1e1" text-color="#ad0000" class="custom-title" size="large">血糖</van-tag>
                 </div>
                 <div class="exercise" v-if="item.recordType === 'exercise'">
@@ -255,7 +311,7 @@ onMounted(() => {
                   <van-tag color="#eed0ff" text-color="#56004f" class="custom-title" size="large">用药</van-tag>
                 </div>
                 <div class="diet" v-if="item.recordType === 'diet'">
-                  {{ item.mealType }}
+                  {{ showMealType(item.mealType) }}
                   <van-tag color="#ffeea1" text-color="#ff7500" class="custom-title" size="large">饮食</van-tag>
                 </div>
               </template>

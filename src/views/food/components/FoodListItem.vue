@@ -18,10 +18,13 @@ const energyKeywords = computed(() => [`${parseFloat(props.food.energy).toFixed(
 const carbText = computed(() => {
   // 确保 food.carb 是一个数字
   const carb = parseFloat(props.food.carb)
+  if (isNaN(carb)) {
+    return `碳水 0克 /100克`
+  }
   return `碳水 ${carb.toFixed(0)}克 /100克`
 })
 
-const carbKeywords = computed(() => [`${parseFloat(props.food.carb).toFixed(0)}`, `碳水`, `克 `])
+const carbKeywords = computed(() => [` ${parseFloat(props.food.carb).toFixed(0)}`, `碳水`, `克 `, `0克/`])
 </script>
 <template>
   <div class="food-list-item">

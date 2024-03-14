@@ -38,11 +38,30 @@ const payload = computed(() => {
       acc[key] = restRefs[key].value
       return acc
     }, {}),
-    userId: userStore.user.id
+    createUserId: userStore.user.id
   }
 
   if (uploadFoodStore.energyUnit === '2') {
     data.energy = (uploadFoodStore.energy / 4.184).toFixed(0)
+  }
+
+  data.id = null
+
+  data.foodPic =
+    uploadFoodStore.foodPic && uploadFoodStore.foodPic[0] && uploadFoodStore.foodPic[0][0] && uploadFoodStore.foodPic[0][0].content
+      ? uploadFoodStore.foodPic[0][0].content
+      : ''
+
+  if (data.isPackedFood == true) {
+    data.isPackedFood = 1
+  } else {
+    data.isPackedFood = 0
+  }
+
+  if (data.isPublicFood == true) {
+    data.isPublicFood = 1
+  } else {
+    data.isPublicFood = 0
   }
 
   return data

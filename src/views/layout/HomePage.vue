@@ -33,7 +33,7 @@ const userRecordList = ref([])
 //获取五条最近的数据
 const getHomePageRecord = async () => {
   const res = await recordGetFiveRecordsService(userStore.user.id)
-  userRecordList.value = res.data.data.recordList
+  userRecordList.value = res.data.data
 }
 
 onMounted(() => {

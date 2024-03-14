@@ -21,10 +21,10 @@ const showSelectDietType = ref(false)
 // 饮食时间相关
 const dietType = ref({ text: '' })
 const selectDietActions = [
-  { text: '早餐', value: 1 },
-  { text: '午餐', value: 2 },
-  { text: '晚餐', value: 3 },
-  { text: '加餐', value: 4 }
+  { text: '早餐', value: 1, enText: 'breakfast' },
+  { text: '午餐', value: 2, enText: 'lunch' },
+  { text: '晚餐', value: 3, enText: 'dinner' },
+  { text: '加餐', value: 4, enText: 'snack' }
 ]
 const onConfirm = ({ selectedOptions }) => {
   showSelectDietType.value = false
@@ -138,7 +138,7 @@ const addRecord = async () => {
   const toAddObj = {
     userId: userStore.user.id,
     foodDetail: food.value.foodDetail,
-    mealType: dietType.value.text,
+    mealType: dietType.value.enText,
     totalCarb: food.value.totalCarb,
     totalProtein: food.value.totalProtein,
     totalFat: food.value.totalFat,

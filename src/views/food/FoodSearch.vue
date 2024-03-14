@@ -13,7 +13,6 @@ const onSearch = (value) => {
   //点击搜索历史，进行搜索
   if (value !== '') {
     historyListStore.addHistoryItem(value)
-    console.log('用户搜索' + value)
   }
   userInput.value = ''
   router.push(`/foodlist?search=${value}`)

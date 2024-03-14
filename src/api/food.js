@@ -49,7 +49,5 @@ export const foodDeleteUserFavoriteService = (userId, foodId) => {
 
 //用户上传食物
 export const foodUserAddFoodService = (food) => {
-  return request.post('/food/add', {
-    food
-  })
+  return request.post('/food/add', food)
 }
