@@ -64,6 +64,31 @@ const tagText = (type) => {
   }
 }
 
+const bloodSugarMainKeyToCN = (key) => {
+  switch (key) {
+    case 'early_morning':
+      return '凌晨'
+    case 'fasting':
+      return '空腹'
+    case 'after_breakfast':
+      return '早餐后'
+    case 'before_lunch':
+      return '午餐前'
+    case 'after_lunch':
+      return '午餐后'
+    case 'before_dinner':
+      return '晚餐前'
+    case 'after_dinner':
+      return '晚餐后'
+    case 'before_bed':
+      return '睡前'
+    case 'random':
+      return '随机'
+    default:
+      return key
+  }
+}
+
 // 根据记录类型返回对应的标签颜色
 const tagColor = (type) => {
   switch (type) {
@@ -219,16 +244,16 @@ const tagTextColor = (type) => {
               class="reset-cell-height"
               title-style="flex: 50%;"
               :value="record.mainValue"
-              v-for="record in userRecordList"
-              :key="record.recordId"
-              @click="router.push(`/check-record/detail?recordRootId=${record.recordId}`)"
+              v-for="(record, index) in userRecordList"
+              :key="index"
+              @click="router.push(`/check-record/detail?recordRootId=${record.recordRootId}`)"
             >
               <template #title>
                 <div class="custom-title">
                   <van-tag :color="tagColor(record.recordType)" :text-color="tagTextColor(record.recordType)" class="custom-title">{{
                     tagText(record.recordType)
                   }}</van-tag>
-                  <span class="span-title"> | {{ record.mainKey }}</span>
+                  <span class="span-title"> | {{ bloodSugarMainKeyToCN(record.mainKey) }}</span>
                 </div>
               </template>
             </van-cell>

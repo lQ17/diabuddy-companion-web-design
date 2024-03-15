@@ -6,7 +6,7 @@ import { recordGetUserTodayLastBloodSugar } from '@/api/record'
 const userStore = useUserStore()
 const initLastTodayBloodSugar = async () => {
   const res = await recordGetUserTodayLastBloodSugar(userStore.user.id)
-  bloodSugarValue.value = res.data.data.bloodSugar * 10 || 85
+  bloodSugarValue.value = res.data.data.bloodSugarValue * 10 || 85
 }
 const router = useRouter()
 const onClickLeft = () => history.back()

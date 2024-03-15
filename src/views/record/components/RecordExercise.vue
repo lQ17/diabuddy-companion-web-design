@@ -81,8 +81,11 @@ const formatedDateTimeToSubmit = computed(() => {
 // 如果没有，让用户自己选
 const initExerciseType = async () => {
   const res = await recordCheckUserLastExerciseService(userStore.user.id)
-  exerciseType.value.text = res.data.data.lastType || ''
-  duration.value = res.data.data.lastDuration || null
+  if (res.data.data != null) {
+    exerciseType.value.text = res.data.data.lastType || ''
+    duration.value = res.data.data.lastDuration || null
+    showSuccessToast('已自动填写上次记录')
+  }
 }
 
 // 提交

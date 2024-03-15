@@ -26,7 +26,7 @@ onMounted(() => {
   <div class="page-container">
     <van-nav-bar title="记录详情" left-text="返回" left-arrow @click-left="onClickLeft" fixed placeholder />
     <check-agent v-if="recordType === 'agent'" :typeDetail="typeDetail"></check-agent>
-    <check-blood-sugar v-if="recordType === 'bloodSugar'" :typeDetail="typeDetail"></check-blood-sugar>
+    <check-blood-sugar v-if="recordType === 'blood_sugar'" :typeDetail="typeDetail"></check-blood-sugar>
     <check-diet v-if="recordType === 'diet'" :typeDetail="typeDetail"></check-diet>
     <check-exercise v-if="recordType === 'exercise'" :typeDetail="typeDetail"></check-exercise>
     <check-injection v-if="recordType === 'injection'" :typeDetail="typeDetail"></check-injection>

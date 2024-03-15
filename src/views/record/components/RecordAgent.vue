@@ -52,9 +52,11 @@ const formatedDateTimeToSubmit = computed(() => {
 // 没有就空着
 const initAgent = async () => {
   const res = await recordCheckUserLastAgentService(userStore.user.id)
-  console.log(res.data.data.lastAgent)
-  agentName.value = res.data.data.lastAgent
-  dosage.value = res.data.data.lastDosage
+  if (res.data.data != null) {
+    agentName.value = res.data.data.lastAgent
+    dosage.value = res.data.data.lastDosage
+    showSuccessToast('已自动填写上次记录')
+  }
 }
 
 // 校验表单
