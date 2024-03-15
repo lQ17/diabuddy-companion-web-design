@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 //获取用户医疗信息
 export const planUserMedicalInfo = (userId) => {
-  return request.get(`/user/medical-info/${userId}`)
+  return request.get(`/plan/medical-info/${userId}`)
 }
 
 //修改用户所有数据(改没改都重新覆盖一遍)
@@ -55,7 +55,7 @@ export const planUserUpdateMedicalInfo = (data) => {
     agent
   }
 
-  return request.post('/user/medical-info', payload)
+  return request.post('/plan/medical-info', payload)
 }
 
 export const planUserGetTDD = (userId) => {
