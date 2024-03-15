@@ -54,44 +54,44 @@ function keysToSnakeCase(object) {
 }
 
 // 递归地将对象键从rate_XX_XX转换为rateXXXX
-function keysFromResponseToRequestFormat(object) {
-  if (_.isObject(object)) {
-    if (_.isArray(object)) {
-      return object.map(keysFromResponseToRequestFormat)
-    } else {
-      return _.mapValues(
-        _.mapKeys(object, (value, key) => {
-          if (/rate_\d{2}_\d{2}/.test(key)) {
-            return key.replace(/rate_(\d{2})_(\d{2})/, 'rate$1$2')
-          }
-          return toCamelCase(key)
-        }),
-        keysFromResponseToRequestFormat
-      )
-    }
-  }
-  return object
-}
+// function keysFromResponseToRequestFormat(object) {
+//   if (_.isObject(object)) {
+//     if (_.isArray(object)) {
+//       return object.map(keysFromResponseToRequestFormat)
+//     } else {
+//       return _.mapValues(
+//         _.mapKeys(object, (value, key) => {
+//           if (/rate_\d{2}_\d{2}/.test(key)) {
+//             return key.replace(/rate_(\d{2})_(\d{2})/, 'rate$1$2')
+//           }
+//           return toCamelCase(key)
+//         }),
+//         keysFromResponseToRequestFormat
+//       )
+//     }
+//   }
+//   return object
+// }
 
 // 递归地将对象键从rateXXXX转换为rate_XX_XX
-function keysFromRequestToResponseFormat(object) {
-  if (_.isObject(object)) {
-    if (_.isArray(object)) {
-      return object.map(keysFromRequestToResponseFormat)
-    } else {
-      return _.mapValues(
-        _.mapKeys(object, (value, key) => {
-          if (/rate\d{4}/.test(key)) {
-            return key.replace(/rate(\d{2})(\d{2})/, 'rate_$1_$2')
-          }
-          return toSnakeCase(key)
-        }),
-        keysFromRequestToResponseFormat
-      )
-    }
-  }
-  return object
-}
+// function keysFromRequestToResponseFormat(object) {
+//   if (_.isObject(object)) {
+//     if (_.isArray(object)) {
+//       return object.map(keysFromRequestToResponseFormat)
+//     } else {
+//       return _.mapValues(
+//         _.mapKeys(object, (value, key) => {
+//           if (/rate\d{4}/.test(key)) {
+//             return key.replace(/rate(\d{2})(\d{2})/, 'rate_$1_$2')
+//           }
+//           return toSnakeCase(key)
+//         }),
+//         keysFromRequestToResponseFormat
+//       )
+//     }
+//   }
+//   return object
+// }
 
 // 请求拦截器
 instance.interceptors.request.use(
@@ -102,7 +102,7 @@ instance.interceptors.request.use(
       config.headers.Authorization = userStore.token
     }
     if (config.data) {
-      config.data = keysFromRequestToResponseFormat(config.data)
+      // config.data = keysFromRequestToResponseFormat(config.data)
       config.data = keysToSnakeCase(config.data)
     }
     return config
@@ -113,7 +113,7 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   (res) => {
-    res.data = keysFromResponseToRequestFormat(res.data)
+    // res.data = keysFromResponseToRequestFormat(res.data)
     res.data = keysToCamelCase(res.data)
     if (res.data.code === 1) {
       return res

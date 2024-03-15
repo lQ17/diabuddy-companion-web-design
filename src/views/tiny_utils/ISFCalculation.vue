@@ -1,10 +1,10 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import ISFTable from '@/assets/pic/ISFTable.png'
 import { useUserStore } from '@/stores'
 import { showSuccessToast } from '@/components/vantComponents'
-import { planUserAddISFService, planUserUpdateISFService } from '@/api/plan'
+import { planUserUpdateISFService, planUserGetTDD } from '@/api/plan'
 const router = useRouter()
 const userStore = useUserStore()
 const onClickLeft = () => history.back()
@@ -26,16 +26,27 @@ const ISFResult = computed(() => {
 })
 
 const onAdd = async () => {
+  await planUserUpdateISFService(userStore.user.id, ISFResult.value)
+  userStore.user.isf = parseFloat(ISFResult.value)
   if (userStore.user.isf) {
-    await planUserUpdateISFService(userStore.user.id, ISFResult.value)
-    userStore.user.isf = parseFloat(ISFResult.value)
     showSuccessToast('更新成功')
   } else {
-    await planUserAddISFService(userStore.user.id, ISFResult.value)
-    userStore.user.isf = parseFloat(ISFResult.value)
     showSuccessToast('新增成功')
   }
 }
+
+const initTdd = async () => {
+  const res = await planUserGetTDD(userStore.user.id)
+  const tdd = res.data.data.tdd
+  if (tdd != null) {
+    showSuccessToast('已自动获取您的TDD数值')
+    userTDD.value = tdd
+  }
+}
+
+onMounted(() => {
+  initTdd()
+})
 </script>
 <template>
   <div class="page-container">

@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { planUserAddPumpBasalRateService } from '@/api/plan'
+import { planUserAddPumpBasalRateService, planUserGetTDD } from '@/api/plan'
 import { useUserStore } from '@/stores'
 import { showSuccessToast } from '@/components/vantComponents'
 const userStore = useUserStore()
@@ -48,6 +48,19 @@ const BasalArrResult = computed(() => {
   } else {
     return [1]
   }
+})
+
+const initTdd = async () => {
+  const res = await planUserGetTDD(userStore.user.id)
+  const tdd = res.data.data.tdd
+  if (tdd != null) {
+    showSuccessToast('已自动获取您的TDD数值')
+    userTDD.value = tdd
+  }
+}
+
+onMounted(() => {
+  initTdd()
 })
 </script>
 <template>

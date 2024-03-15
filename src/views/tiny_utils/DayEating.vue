@@ -4,7 +4,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores'
 import { showSuccessToast } from '@/components/vantComponents'
-import { planUserAddDayEatingService, planUserUpdateDayEatingService } from '@/api/plan'
+import { planUserUpdateDayEatingService } from '@/api/plan'
 const userStore = useUserStore()
 
 const onAdd = async () => {
@@ -13,11 +13,11 @@ const onAdd = async () => {
   const dayEatingProtein = parseFloat(proteinWeight.value)
   const dayEatingFat = parseFloat(fatWeight.value)
 
+  await planUserUpdateDayEatingService(userStore.user.id, dayEatingEnergy, dayEatingCarb, dayEatingProtein, dayEatingFat)
+
   if (userStore.user.dayEatingEnergy) {
-    await planUserUpdateDayEatingService(userStore.user.id, dayEatingEnergy, dayEatingCarb, dayEatingProtein, dayEatingFat)
     showSuccessToast('更新成功')
   } else {
-    await planUserAddDayEatingService(userStore.user.id, dayEatingEnergy, dayEatingCarb, dayEatingProtein, dayEatingFat)
     showSuccessToast('新增成功')
   }
   userStore.user.dayEatingEnergy = dayEatingEnergy

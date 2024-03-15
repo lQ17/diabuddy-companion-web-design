@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { planUserAddTDDService, planUserUpdateTDDService } from '@/api/plan'
+import { planUserUpdateTDDService } from '@/api/plan'
 import { useUserStore } from '@/stores'
 import { showSuccessToast } from '@/components/vantComponents'
 const userStore = useUserStore()
@@ -24,13 +24,11 @@ const TDDResult = computed(() => {
 })
 
 const onAdd = async () => {
+  await planUserUpdateTDDService(userStore.user.id, TDDResult.value)
+  userStore.user.tdd = parseFloat(TDDResult.value)
   if (userStore.user.tdd) {
-    await planUserUpdateTDDService(userStore.user.id, TDDResult.value)
-    userStore.user.tdd = parseFloat(TDDResult.value)
     showSuccessToast('更新成功')
   } else {
-    await planUserAddTDDService(userStore.user.id, TDDResult.value)
-    userStore.user.tdd = parseFloat(TDDResult.value)
     showSuccessToast('新增成功')
   }
 }

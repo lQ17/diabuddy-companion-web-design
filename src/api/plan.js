@@ -58,44 +58,48 @@ export const planUserUpdateMedicalInfo = (data) => {
   return request.post('/user/medical-info', payload)
 }
 
-//用户添加TDD
-export const planUserAddTDDService = (userId, tdd) => {
-  return request.post('/plan/tdd', {
-    userId,
-    tdd
-  })
+export const planUserGetTDD = (userId) => {
+  return request.get(`/plan/tdd/${userId}`)
 }
+
+//用户添加TDD
+// export const planUserAddTDDService = (userId, tdd) => {
+//   return request.post('/plan/tdd', {
+//     userId,
+//     tdd
+//   })
+// }
 
 //用户添加ICR
-export const planUserAddICRService = (userId, icr) => {
-  return request.post('/plan/icr', {
-    userId,
-    icr
-  })
-}
+// export const planUserAddICRService = (userId, icr) => {
+//   return request.post('/plan/icr', {
+//     userId,
+//     icr
+//   })
+// }
 
 //用户添加ISF
-export const planUserAddISFService = (userId, isf) => {
-  return request.post('/plan/isf', {
-    userId,
-    isf
-  })
-}
+// export const planUserAddISFService = (userId, isf) => {
+//   return request.post('/plan/isf', {
+//     userId,
+//     isf
+//   })
+// }
 
 //用户添加DayEating
-export const planUserAddDayEatingService = (userId, dayEatingEnergy, dayEatingCarb, dayEatingProtein, dayEatingFat) => {
-  return request.post('/plan/day-eating', {
-    userId,
-    dayEatingEnergy,
-    dayEatingCarb,
-    dayEatingProtein,
-    dayEatingFat
-  })
-}
+// export const planUserAddDayEatingService = (userId, dayEatingEnergy, dayEatingCarb, dayEatingProtein, dayEatingFat) => {
+//   return request.post('/plan/day-eating', {
+//     userId,
+//     dayEatingEnergy,
+//     dayEatingCarb,
+//     dayEatingProtein,
+//     dayEatingFat
+//   })
+// }
 
 //用户更新TDD
 export const planUserUpdateTDDService = (userId, tdd) => {
-  return request.put('/plan/tdd', {
+  return request.post('/plan/tdd', {
     userId,
     tdd
   })
@@ -103,7 +107,7 @@ export const planUserUpdateTDDService = (userId, tdd) => {
 
 //用户更新ICR
 export const planUserUpdateICRService = (userId, icr) => {
-  return request.put('/plan/icr', {
+  return request.post('/plan/icr', {
     userId,
     icr
   })
@@ -111,7 +115,7 @@ export const planUserUpdateICRService = (userId, icr) => {
 
 //用户更新ISF
 export const planUserUpdateISFService = (userId, isf) => {
-  return request.put('/plan/isf', {
+  return request.post('/plan/isf', {
     userId,
     isf
   })
@@ -119,7 +123,7 @@ export const planUserUpdateISFService = (userId, isf) => {
 
 //用户更新DayEating
 export const planUserUpdateDayEatingService = (userId, dayEatingEnergy, dayEatingCarb, dayEatingProtein, dayEatingFat) => {
-  return request.put('/plan/day-eating', {
+  return request.post('/plan/day-eating', {
     userId,
     dayEatingEnergy,
     dayEatingCarb,

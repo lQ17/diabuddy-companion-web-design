@@ -1,8 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores'
-import { planUserAddICRService, planUserUpdateICRService } from '@/api/plan'
+import { planUserUpdateICRService, planUserGetTDD } from '@/api/plan'
 import { showSuccessToast } from '@/components/vantComponents'
 const userStore = useUserStore()
 const router = useRouter()
@@ -23,16 +23,27 @@ const ICRResult = computed(() => {
 })
 
 const onAdd = async () => {
+  await planUserUpdateICRService(userStore.user.id, ICRResult.value)
+  userStore.user.icr = parseFloat(ICRResult.value)
   if (userStore.user.icr) {
-    await planUserUpdateICRService(userStore.user.id, ICRResult.value)
-    userStore.user.icr = parseFloat(ICRResult.value)
     showSuccessToast('更新成功')
   } else {
-    await planUserAddICRService(userStore.user.id, ICRResult.value)
-    userStore.user.icr = parseFloat(ICRResult.value)
     showSuccessToast('新增成功')
   }
 }
+
+const initTdd = async () => {
+  const res = await planUserGetTDD(userStore.user.id)
+  const tdd = res.data.data.tdd
+  if (tdd != null) {
+    showSuccessToast('已自动获取您的TDD数值')
+    userTDD.value = tdd
+  }
+}
+
+onMounted(() => {
+  initTdd()
+})
 </script>
 <template>
   <div class="page-container">
