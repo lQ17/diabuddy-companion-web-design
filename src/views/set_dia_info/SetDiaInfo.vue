@@ -142,16 +142,43 @@ const onConfirmBreakfastInjectionWay = (selectedOptions) => {
   showBreakfastSelectInjectionWay.value = false
   breakfastInjectionWay.value.text = selectedOptions.selectedOptions[0].text
   breakfastInjectionWay.value.value = selectedOptions.selectedOptions[0].value
+  // if (selectedOptions.selectedOptions[0].text == '大剂量') {
+  //   breakfastSquareWaveRate.value = null
+  //   breakfastSquareWaveTime.value = null
+  // } else if (selectedOptions.selectedOptions[0].text == '方波') {
+  //   breakfastBolus.value = null
+  // }
+  breakfastBolus.value = null
+  breakfastSquareWaveRate.value = null
+  breakfastSquareWaveTime.value = null
 }
 const onConfirmLunchInjectionWay = (selectedOptions) => {
   showLunchSelectInjectionWay.value = false
   lunchInjectionWay.value.text = selectedOptions.selectedOptions[0].text
   lunchInjectionWay.value.value = selectedOptions.selectedOptions[0].value
+  // if (selectedOptions.selectedOptions[0].text == '大剂量') {
+  //   lunchSquareWaveRate.value = null
+  //   lunchSquareWaveTime.value = null
+  // } else if (selectedOptions.selectedOptions[0].text == '方波') {
+  //   lunchBolus.value = null
+  // }
+  lunchSquareWaveRate.value = null
+  lunchSquareWaveTime.value = null
+  lunchBolus.value = null
 }
 const onConfirmDinnerInjectionWay = (selectedOptions) => {
   showDinnerSelectInjectionWay.value = false
   dinnerInjectionWay.value.text = selectedOptions.selectedOptions[0].text
   dinnerInjectionWay.value.value = selectedOptions.selectedOptions[0].value
+  // if (selectedOptions.selectedOptions[0].text == '大剂量') {
+  //   dinnerSquareWaveRate.value = null
+  //   dinnerSquareWaveTime.value = null
+  // } else if (selectedOptions.selectedOptions[0].text == '方波') {
+  //   dinnerBolus.value = null
+  // }
+  dinnerBolus.value = null
+  dinnerSquareWaveRate.value = null
+  dinnerSquareWaveTime.value = null
 }
 // 胰岛素泵 所有输入框显示控件
 const showPumpInputs = computed(() => {
