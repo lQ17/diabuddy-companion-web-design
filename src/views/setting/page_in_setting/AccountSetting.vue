@@ -1,12 +1,23 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores'
+import { userUpdateAvatarService } from '@/api/user'
+import { showSuccessToast } from '@/components/vantComponents'
 const userStore = useUserStore()
 const onClickLeft = () => history.back()
 
-// 用户头像 URL
+// 用户头像 URL  记得回显
 const userPic = ref('')
 const username = ref('')
+
+const afterRead = async (file) => {
+  console.log(file.content)
+  userPic.value = file.content
+  userStore.user.userPic = file.content
+  await userUpdateAvatarService(userStore.user.id, file.content)
+  showSuccessToast('更新成功')
+}
+
 onMounted(() => {
   userPic.value = userStore.user.userPic
   username.value = userStore.user.username
@@ -17,8 +28,8 @@ onMounted(() => {
   <div class="page-container">
     <van-nav-bar title="账号设置" left-text="返回" left-arrow @click-left="onClickLeft" placeholder />
     <div class="avatar-box">
-      <van-uploader accept="image/*">
-        <van-image round width="70" height="70" fit="cover" position="center" :src="userPic" @click="showActionSheet = true">
+      <van-uploader accept="image/*" :after-read="afterRead">
+        <van-image round width="70" height="70" fit="cover" position="center" :src="userPic">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
           </template>

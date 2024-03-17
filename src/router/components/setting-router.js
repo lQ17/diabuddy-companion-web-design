@@ -39,5 +39,9 @@ export default [
   {
     path: '/setting/cancel-account',
     component: () => import('@/views/setting/page_in_setting/page_in_account_security_setting/CancelAccount.vue')
+  },
+  {
+    path: '/setting/privacy',
+    component: () => import('@/views/setting/page_in_setting/PrivacySetting.vue')
   }
 ]

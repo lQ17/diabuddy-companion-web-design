@@ -1,9 +1,31 @@
 <script setup>
 import { ref } from 'vue'
+import { useUserStore } from '@/stores'
+import { userUpdatePasswordService } from '@/api/user'
+import { showFailToast, showSuccessToast } from '@/components/vantComponents'
+// import { useRouter } from 'vue-router'
+// const router = useRouter()
+const userStore = useUserStore()
 const onClickLeft = () => history.back()
 const oldPassword = ref('')
 const newPassword = ref('')
 const reNewPassword = ref('')
+
+const onClick = async () => {
+  if (newPassword.value !== reNewPassword.value) {
+    showFailToast('新密码两次输入不一致')
+    return
+  }
+  if (oldPassword.value === newPassword.value) {
+    showFailToast('新密码不能与旧密码相同')
+    return
+  }
+  await userUpdatePasswordService(userStore.user.id, oldPassword.value, newPassword.value)
+  showSuccessToast('修改成功')
+  history.back()
+}
+
+const toFindPassword = () => {}
 </script>
 
 <template>
@@ -16,8 +38,14 @@ const reNewPassword = ref('')
           <van-field class="bordered-field" v-model="newPassword" center clearable placeholder="请输入新密码" />
           <van-field class="bordered-field" v-model="reNewPassword" center clearable placeholder="请再次输入新密码" />
         </van-cell-group>
+        <div id="forget-box">
+          <van-row>
+            <van-col span="18"></van-col>
+            <van-col span="6" @click="toFindPassword()">忘记密码？</van-col>
+          </van-row>
+        </div>
         <div style="margin: 16px">
-          <van-button round block type="primary" native-type="submit"> 确定 </van-button>
+          <van-button round block type="primary" native-type="submit" @click="onClick"> 确定 </van-button>
         </div>
       </van-form>
     </div>
@@ -25,6 +53,12 @@ const reNewPassword = ref('')
 </template>
 
 <style scoped>
+#forget-box {
+  margin-top: 10px;
+  margin-right: 10px;
+  font-size: 15px;
+  color: #1989fa;
+}
 .change-form {
   margin-top: 30px;
 }

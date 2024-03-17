@@ -110,12 +110,12 @@ onMounted(() => {
     <!-- 最后一行黑色的icon -->
     <div class="user-service-box">
       <van-row class="user-service-icon-row" justify="space-around" :gutter="[20, 20]">
-        <van-col span="6">
+        <!-- <van-col span="6">
           <div class="user-service-icon-outside-div">
             <van-icon name="friends-o" class="user-service-icon" size="30" />
             <div class="user-service-icon-description">共享管理</div>
           </div>
-        </van-col>
+        </van-col> -->
         <van-col span="6">
           <div class="user-service-icon-outside-div">
             <van-icon name="service-o" class="user-service-icon" size="30" />
@@ -128,6 +128,7 @@ onMounted(() => {
             <div class="user-service-icon-description">用户设置</div>
           </div>
         </van-col>
+        <van-col span="6"></van-col>
         <van-col span="6"></van-col>
       </van-row>
     </div>

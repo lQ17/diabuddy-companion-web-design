@@ -29,7 +29,7 @@ const onClickLeft = () => history.back()
     </div>
     <div class="foot-box">
       <div class="foot-msg">*本软件目前仅对一型糖友提供健康参考</div>
-      <div class="foot-msg">*有任何问题请发送邮件至Qingx.Yang@outlook.com</div>
+      <div class="foot-msg">*有任何问题请发送邮件至diabuddy_companion@outlook.com</div>
     </div>
   </div>
 </template>

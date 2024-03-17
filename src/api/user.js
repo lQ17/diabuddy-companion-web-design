@@ -79,3 +79,38 @@ export const userBindPhoneService = (id, phone) => {
     phone
   })
 }
+
+// 查看是否为隐私账户
+export const userCheckPrivateService = (userId) => {
+  return request.get(`/user/private/${userId}`)
+}
+
+// 修改隐私状态
+export const userUpdatePrivateService = (userId, isPrivateUser) => {
+  return request.post('/user/private', {
+    userId,
+    isPrivateUser
+  })
+}
+
+// 改密码
+export const userUpdatePasswordService = (id, oldPasswordNoMD5, newPasswordNoMD5) => {
+  const oldPassword = CryptoJS.MD5(oldPasswordNoMD5).toString()
+  const newPassword = CryptoJS.MD5(newPasswordNoMD5).toString()
+  return request.put('/user/update-password', { id, oldPassword, newPassword })
+}
+
+// 更新username
+export const userUpdateUsernameService = (id, username) => {
+  return request.put('/user/username', { id, username })
+}
+
+// 更新基本信息
+export const userUpdateUserInfoService = (id, username, fullName, birthday, gender, address) => {
+  return request.put('/user/update-info', { id, username, fullName, birthday, gender, address })
+}
+
+// 更新头像
+export const userUpdateAvatarService = (id, userPic) => {
+  return request.put('/user/pic', { id, userPic })
+}

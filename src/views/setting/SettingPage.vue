@@ -22,7 +22,6 @@ const onLogout = () => {
     <div class="cell-group">
       <van-cell-group>
         <van-cell title="账号设置" is-link to="/setting/account-setting" />
-        <van-cell title="共享管理" is-link to="/" />
       </van-cell-group>
     </div>
     <div class="cell-group">
@@ -32,8 +31,8 @@ const onLogout = () => {
     </div>
     <div class="cell-group">
       <van-cell-group>
-        <van-cell title="隐私设置(还没开发)" is-link to="/" />
-        <van-cell title="清除缓存(还没开发)" is-link to="/" />
+        <van-cell title="隐私设置" is-link to="/setting/privacy" />
+        <van-cell title="清除缓存" is-link to="/" />
       </van-cell-group>
     </div>
     <div class="cell-group">
