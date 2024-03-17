@@ -65,7 +65,7 @@ const initList = async () => {
     const res = await shareGetListService(userStore.user.id)
     shareList.value = res.data.data.list
   } catch (error) {
-    console.error('Failed to load the list:', error)
+    console.error('列表加载失败:', error)
   } finally {
     // 无论请求成功还是失败，都关闭加载提示
     closeToast()

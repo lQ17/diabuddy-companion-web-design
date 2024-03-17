@@ -2,12 +2,12 @@ import request from '@/utils/request'
 
 //获取互相关联的列表
 export const shareGetListService = (userId) => {
-  return request.get(`/share/list?user_id=${userId}`)
+  return request.get(`/share/list/${userId}`)
 }
 
 //删除好友
 export const shareDeleteByIdService = (userId, friendId) => {
-  return request.delete(`/share?user_id=${userId}&friend_id=${friendId}`)
+  return request.delete(`/share/del?user_id=${userId}&friend_id=${friendId}`)
 }
 
 //根据手机号搜索用户

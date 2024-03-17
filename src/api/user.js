@@ -66,3 +66,16 @@ export const userGetEamilMsgService = (email) => {
 export const userGetInfoService = (userId) => {
   return request.get(`/user/info?userId=${userId}`)
 }
+
+// 获取手机号
+export const userGetUserPhoneService = (userId) => {
+  return request.get(`/user/phone/${userId}`)
+}
+
+// 绑定手机号
+export const userBindPhoneService = (id, phone) => {
+  return request.post('/user/phone', {
+    id,
+    phone
+  })
+}
